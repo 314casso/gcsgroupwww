@@ -1,5 +1,19 @@
 {% load menu_tags %}
 {% for child in children %}
-<a class="{% if child.selected %}selected{% endif %}{% if child.ancestor %}ancestor{% endif %}{% if child.sibling %}sibling{% endif %}{% if child.descendant %}descendant{% endif %}" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
-{% if not forloop.last %} | {% endif %}
+<li class="{% if child.selected %}selected{% endif %}{% if child.ancestor %}ancestor{% endif %}{% if child.sibling %}sibling{% endif %}{% if child.descendant %}descendant{% endif %}">
+	<div class="servicesmenu_">
+		<a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+	</div>
+	{% if child.children %}
+	<div class="submenu">
+		<div class="submenu_middle">
+			<div class="submenu_middle_">
+				<ul>
+					{% show_menu from_level to_level extra_inactive extra_active 'includes/submenu.html' "" "" child %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+</li>
 {% endfor %}

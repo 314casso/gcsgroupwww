@@ -3,100 +3,146 @@
 	{% load i18n %}
 	{% load url from future %}
 	{% load cms_tags sekizai_tags %}
-	{% load page_tags %}	
-	{% load url from future %} 
+	{% load page_tags %}
+	{% load url from future %}
 	<head>
 		<title>{% block title %}{% page_attribute page_title %}{% endblock %}</title>
 		<meta name="description" content="{% block meta-description %}{% page_attribute meta_description %}{% endblock %}"/>
 		<meta name="keywords" content="{% block meta-keywords %}{% page_attribute meta_keywords %}{% endblock %}"/>
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/font2.css">
 		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/style.css">
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}libs/digital-clock/digital-clock.css"/>
 		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/form.css">
 		{% render_block "css" %}
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}libs/digital-clock/digital-clock.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+
+		<script type="text/javascript" src="{{ STATIC_URL }}ruscon/js/jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}ruscon/js/jquery.ulslide.js"></script>
+
+		<script type="text/javascript" src="{{ STATIC_URL }}ruscon/js/default.js"></script>
 		{% render_block "js" %}
 	</head>
 
 	<body>
-		<div class="wide">
-			<div class="container">
-
-				<div id="header">
-					<div id="logo">
-						<a href="/" title="РУСКОН"><img src="{{ STATIC_URL }}ruscon/images/logo.gif" width="221" height="50" border="0" alt="РУСКОН" /></a>
-					</div>
-
-					{% load page_tags %}{% clocks 6 %}
-
-				</div><!--end header-->
-
-			</div>
-		</div>
-
-		<div class="wideline">
-			&nbsp;
-		</div>
-		<!--menu-->
-		<div class="widemenu">
-			<div class="container">
-				<div class="topmenu">
-					<ul>
-						
-						{% load sitetree %}
-						{% sitetree_menu from "mainmenu" include "trunk" template "includes/top_menu.html" %}
-						
-						 
-						 {% for lang in LANGUAGES %}
-        					{% ifnotequal lang.0 LANGUAGE_CODE %}
-        					<li><a href="/{{lang.0}}{{request.path}}">{{ lang.0|human_lang }}</a></li>      					      
-        				{% endifnotequal %}
-    					{% endfor %}					
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!--end menu-->
-
-		{% block widepromo %}{% endblock widepromo %}
-
-		<div class="wideline">
-			&nbsp;
-		</div>
 
 		<div class="container">
-			<div class="maincontent">	
-				<div class="line">&nbsp;</div>			
-				{% block maincontent %}
-				<div id="content" class="hfeed">
-					
-        {% block content %}{% endblock %}     
-      </div>
-				{% endblock maincontent %}
-			</div>
-		</div>
+			<div class="container1">
+				<div class="container2">
+					<div id="language_switch">
+						{% for lang in LANGUAGES %}<a href="/{{lang.0}}{{request.path}}">{{ lang.0|human_lang|safe }}</a>{% endfor %}
+					</div>
+					<div id="icons">
+						<a href="/"><img src="{{ STATIC_URL }}ruscon/images/icon_home.gif" /></a>
+						<a href="/order/"><img src="{{ STATIC_URL }}ruscon/images/icon_contacts.gif" class="last" /></a>
+					</div>
 
-		<div class="wideline">
-			&nbsp;
-		</div>
-		<div class="container">				
-			<div class="footer_menu">
-				{% show_placeholder "adresses" "global_placeholder" %}				
-			</div>
+					{% block slideshow %}
+					<div id="header_index">
+						<ul class="clients_animation_fade">
+							<li><img src="{{ STATIC_URL }}ruscon/images/header_index5.jpg" />
+							</li>
+							<li><img src="{{ STATIC_URL }}ruscon/images/header_index2.jpg" />
+							</li>
+							<li><img src="{{ STATIC_URL }}ruscon/images/header_index3.jpg" />
+							</li>
+							<li><img src="{{ STATIC_URL }}ruscon/images/header_index4.jpg" />
+							</li>
+						</ul>
+					</div>
+					{% endblock slideshow %}
 
-			<div id="footer">
-				<p>
-				{% get_copyright %}	{% show_placeholder "get-copyright" "global_placeholder" %}
-					<br />				
-					{% sitetree_menu from "mainmenu" include "trunk" template "includes/menu_line.html" %}		
-				</p>
-				<div id="address">
-					<p>						
-						{% show_placeholder "liveinternet" "global_placeholder" %}
-					</p>
+					{% block header %}
+					<div id="header">
+						<div id="logo"></div>
+						<div id="logo_">
+							<a href="/"><img src="{{ STATIC_URL }}ruscon/images/gcs_logo.gif" width="189" height="78" alt="" title="" /></a>
+						</div>
+						<div id="phone"></div>
+						<div id="phone_">
+							<div id="clients_list">
+								{% show_placeholder "big-phones" "global_placeholder" %}
+							</div>
+							<div class="clear"></div>
+
+						</div>
+
+						<div id="menu"></div>
+						<div id="menu_">
+							{% load cache menu_tags %}
+							<ul>
+								{% show_menu 0 0 100 100 %}
+							</ul>
+						</div>
+
+						<div id="slogan">
+							{% placeholder "bigpromo-title" inherit %}
+						</div>
+					</div>
+					{% endblock header %}
+
+					<div id="content">
+						<div id="content_left">
+							{% block entry-content %}
+							<h1>{% placeholder "custom-title" or %}{% page_attribute title %}{% endplaceholder %}</h1>
+							{% placeholder "page-content" or %}
+							<ul>
+								{% load cache menu_tags %}
+								{% show_sub_menu 2 %}
+							</ul>
+							{% endplaceholder %}
+							{% endblock %}
+						</div>
+						<div id="content_right">
+							<div id="content_right_">
+
+								<div id="servicesmenu">
+									<ul>
+										{% show_menu_below_id "service" 0 100 100 100  'includes/menu.html' %}
+									</ul>
+								</div>
+
+								<div class="window_header">
+									{% show_placeholder "banners-title" "global_placeholder" %}
+								</div>
+								<div class="window_body">
+									<div id="clients">
+										<div id="clients_">
+											<ul class="clients_animation_slide">
+												{% show_placeholder "banners" "global_placeholder" %}
+											</ul>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+
+					<div id="banners">
+
+					</div>
+
+					<div id="footer">
+						<div id="footer_left">
+							{% show_placeholder "adresses" "global_placeholder" %}
+						</div>
+						<div id="footer_right">
+							{% show_placeholder "liveinternet" "global_placeholder" %}
+						</div>
+						<div class="clear"></div>
+					</div>
+
+					<div id="authors">
+						{% get_copyright '2008' %}	{% show_placeholder "get-copyright" "global_placeholder" %}
+					</div>
+
 				</div>
-			</div><!--end footer-->			
+			</div>
 		</div>
 
 	</body>
+
 </html>
+

@@ -2,7 +2,7 @@
 #stylized {
 	background: #efefef;
 	clear: both;
-	padding: 28px;
+	padding: 25px 28px 10px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -54,7 +54,7 @@
 #stylized p {
 	clear: both;
 	display: block;
-	overflow: visible;
+	overflow: hidden;
 }
 
 #stylized label, #stylized input {

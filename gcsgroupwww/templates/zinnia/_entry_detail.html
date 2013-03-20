@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block entry-title %}
-    <h2 class="entry-title">{{ object.title }}</h2>
+    <h1 class="entry-title">{{ object.title }}</h1>
 {% endblock %}
 
 {% block entry-comments %}{% endblock entry-comments %}
@@ -40,6 +40,18 @@
 {% endblock %}
 
 {% block entry-tags %}
+{% if object.related_published %}
+  <div class="entry-related">
+    <h4>{% trans "Related entries" %}</h4>
+    <ul>
+      {% for entry in object.related_published %}
+      <li>
+	<a href="{{ entry.get_absolute_url }}" title="{{ entry.title }}" rel="bookmark">{{ entry.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
 {% endblock %}
 
 {% block entry-shorturl %}

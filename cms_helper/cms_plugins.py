@@ -10,8 +10,14 @@ from forms import CustomContactForm
 from cmsplugin_filer_folder.cms_plugins import FilerFolderPlugin
 from cmsplugin_zinnia.cms_plugins import CMSQueryEntriesPlugin
 from zinnia.models.entry import Entry
-from rusconwww.local_settings import DEFAULT_FROM_EMAIL
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+from cms.plugin_base import CMSPluginBase
+from cms.plugins.text.models import Text
+from cms.plugins.text.forms import TextForm
+from cms_helper.forms import PlainTextForm
+from gcsgroupwww.local_settings import DEFAULT_FROM_EMAIL
 
 class CustomContactPlugin(ContactPlugin):
     name = _("Custom Contact Form")
@@ -71,7 +77,7 @@ class CMSCategoryEntriesPlugin(CMSQueryEntriesPlugin):
         if instance.number_of_entries:
             entries = entries[:instance.number_of_entries]
         
-        paginator = Paginator(entries, 10)  
+        paginator = Paginator(entries, 7)  
         self.request = context['request']          
         page = self.request.GET.get('page')
         try:
@@ -93,4 +99,25 @@ class CMSCategoryEntriesPlugin(CMSQueryEntriesPlugin):
         return context
 
 plugin_pool.register_plugin(CMSCategoryEntriesPlugin)
+
+class PlainTextPlugin(CMSPluginBase):
+        model = Text
+        name = _("PlainText")
+        form = PlainTextForm
+        render_template = "cms/plugins/text.html"
+
+        def render(self, context, instance, placeholder):
+                context.update({
+                        'body': instance.body, 
+                        'placeholder': placeholder,
+                        'object': instance
+                })
+                return context
+        
+        def save_model(self, request, obj, form, change):
+                obj.clean_plugins()
+                super(PlainTextPlugin, self).save_model(request, obj,
+        form, change)
+
+plugin_pool.register_plugin(PlainTextPlugin)
     

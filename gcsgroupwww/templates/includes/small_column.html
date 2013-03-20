@@ -2,14 +2,13 @@
 {% if page_reverce_id %}
 <div class="item">
 	{% load cms_tags sekizai_tags %}
-	{% load sitetree %}
-		
-	{% get_menuitem page_reverce_id "includes/menu_item.html" %}
+			
+	{ get_menuitem  }
 		
 	{% block submenu %}
 	<ul class="sub-menu">
 	
-	{% sitetree_menu from 'mainmenu' include page_reverce_id template "includes/top_menu.html" %}
+	{ sitetree_menu }
 	</ul>
 	{% endblock submenu %}
 </div>

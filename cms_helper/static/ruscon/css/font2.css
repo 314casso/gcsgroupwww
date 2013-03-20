@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'PT Sans Caption';
+  src: url('fonts/pt-sans-caption.eot');
+  src: local(':-)'),
+         url('fonts/pt-sans-caption.woff') format('woff'), url('fonts/pt-sans-caption.ttf') format('truetype');
+}

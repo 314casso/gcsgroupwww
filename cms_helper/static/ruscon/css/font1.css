@@ -1,0 +1,6 @@
+﻿@font-face {
+  font-family: 'Droid Serif';
+  src: url('/cms/templates/gcs/css/fonts/droid-serif.eot');
+  src: local(':-)'),
+         url('/cms/templates/gcs/css/fonts/droid-serif.woff') format('woff'), url('/cms/templates/gcs/css/fonts/droid-serif.ttf') format('truetype');
+}

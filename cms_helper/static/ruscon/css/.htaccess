@@ -1,0 +1,20 @@
+###
+###
+###
+AddHandler parsed-html html p3 css
+Action parsed-html /cgi-bin/parser3.cgi
+
+###
+###
+###
+RewriteEngine on
+RewriteBase /
+
+#RewriteCond %{HTTP_HOST} ^gcschina.ru$
+#RewriteRule ^(.*)$ http://www.gcschina.ru/$1 [R=301,L]
+
+RewriteOptions inherit
+RewriteRule \.(gif|jpg|png|js|exe|zip|rar|pdf|rtf|ppt|swf|ipx|xslt|xsl|tif|eps|tiff|ico|gz)$ - [L]
+RewriteCond	%{REQUEST_FILENAME}	!-f
+RewriteCond	%{REQUEST_FILENAME}	!-d
+RewriteRule	^(.*)$	/index.html?uri=/$1 [QSA,L]

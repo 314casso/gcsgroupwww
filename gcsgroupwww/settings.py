@@ -20,7 +20,7 @@ MANAGERS = ADMINS
 
 DEFAULT_LANGUAGE = 'ru'
 
-LANGUAGES = [('ru', u'Русский'), ('en', u'English')]
+LANGUAGES = [('ru', u'Русский'), ('en', u'English'), ('zh-cn', u'Chinese')]
 
 from local_settings import * #@UnusedWildImport
 
@@ -105,7 +105,7 @@ CMS_TEMPLATES = (
     ('global_placeholder.html', 'Global Placeholder'),
 )
 
-ROOT_URLCONF = 'rusconwww.urls'
+ROOT_URLCONF = 'gcsgroupwww.urls'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
@@ -115,15 +115,19 @@ CACHES = {
     'default': dict(
         BACKEND = 'django.core.cache.backends.memcached.MemcachedCache',
         LOCATION = ['127.0.0.1:11211'],
+	KEY_PREFIX = 'gcsgroupwww',	
     )
 }
 
 ZINNIA_PAGINATION = 10
 CMSPLUGIN_ZINNIA_TEMPLATES = [('includes/news_style.html', 'News style')]
 
+from django.utils.translation import ugettext_lazy as _
+CMSPLUGIN_FILER_FOLDER_VIEW_OPTIONS = (("list", _("List")),("slideshow",_("Slideshow")), ("simplelist", _("Simple list")))
+CMS_MENU_TITLE_OVERWRITE = True
 
 CMS_REDIRECTS = True
-CMS_CACHE_PREFIX = 'ruscon'
+CMS_CACHE_PREFIX = 'gcsgroupwww'
 
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
@@ -158,17 +162,12 @@ INSTALLED_APPS = (
     'mptt',
     'zinnia',
     'modeltranslation',
-    'orderedmodel',
-    'cmsplugin_zinnia',
-    #'sorl.thumbnail',
+    'cmsplugin_zinnia',    
     'cmsplugin_contact',
     'easy_thumbnails',
     'filer',
     'cmsplugin_filer_folder',
     'cmsplugin_filer_image',
-    'cms.plugins.teaser',
-    #'django.contrib.redirects',
-    'transferapp',
-    'sitetree',
-    'cms_helper.cms_plugins',    
+    'cms.plugins.teaser',    
+    'cms_helper.cms_plugins',
 )

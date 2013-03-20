@@ -2,30 +2,27 @@
 {% load cms_tags sekizai_tags %}
 {% load page_tags %}
 
-{% block widepromo %}
-<div class="widepromo_sm">
-	<div class="container">
-		<div class="ship_sm">
-			<img border="0" width="162" height="100" src="{{ STATIC_URL }}ruscon/images/ship_sm.png" />			
-		</div>
-		<div class="prom_sm">
-			<p class="tit">
-				{% placeholder "bigpromo-title" inherit %}
-			</p>
-		</div>
+{% block slideshow %}{% endblock slideshow %}
+
+{% block header %}
+<div id="header_2level" style="background: url({{ STATIC_URL }}ruscon/images/{% placeholder "header-image" inherit or %}{% show_placeholder "header-image" "global_placeholder" %}{% endplaceholder %})">
+	<div id="logo"></div>
+	<div id="logo_">
+		<a href="/"><img src="{{ STATIC_URL }}ruscon/images/gcs_logo.gif" width="189" height="78" alt="" title="" /></a>
+	</div>
+	<div id="phone"></div>
+	<div id="phone_">
+		{% show_placeholder "big-phones" "global_placeholder" %}
+	</div>
+
+	<div id="menu_2level"></div>
+	<div id="menu_2level_">
+		{% load cache menu_tags %}
+		<ul>
+			{% show_menu 0 0 100 100 %}
+		</ul>
 	</div>
 </div>
-{% endblock widepromo %}
+{% endblock header %}
 
-{% block maincontent %}
-<div class="small_column">
-{% load page_tags %}
-{% include 'includes/small_column.html' with page_reverce_id=current_page.get_root.reverse_id %}	 	
-</div>
-<div class="big_column">        
-{% block entry-content %}
-<h1>{% placeholder "custom-title" or %}{% page_attribute page_title %}{% endplaceholder %}</h1>
-  {% placeholder "page-content" %}
-{% endblock %}
-</div>
-{% endblock maincontent %}
+

@@ -52,6 +52,5 @@ function digitalClock(clock_offset) {
 		digitalClock(6);
 		digitalClock(11);
 		digitalClock(8);
-		digitalClock(2);
 	})
 })(jQuery)

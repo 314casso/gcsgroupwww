@@ -1,0 +1,30 @@
+﻿/*
+body { margin-top: 36px; }
+#admin_navigation { width: 100%; height: 35px; position: absolute; z-index: 1000; font-family: Tahoma; font-size: 11px; color: #ffffff; background: #333333 url(/cms/templates/gcs/pics/admin/topbg.gif) top left repeat-x; top: 0%; left: 0%; }
+#admin_navigation_ { padding-left: 10px; padding-top: 5px; }
+*/
+
+.admin_link { position: absolute; z-index: 1000; border: 1px red dashed; padding: 2px; }
+.admin_link input { font-size: 11px; font-family: Tahoma; }
+
+#cms_logo { font-family: Verdana; font-size: 19px; letter-spacing: -1px; float: left; }
+#cms_version { font-family: Tahoma; font-size: 9px; letter-spacing: 0px; color: #cccccc; margin-left: 5px; float: left; }
+
+#modal_dialog, #modal_dialog_loading, #modal_dialog_confirm { display: none; }
+
+body, div, td { font-size: 11px; font-family: Tahoma; } 
+
+input { font-family: Tahoma; font-size: 11px; }
+
+.sortable, .sortable_ { list-style-type: none; margin: 10px 0px 0px 0px; padding: 0; }
+.sortable li, .sortable_ li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; }
+.sortable li span, .sortable_ li span { position: absolute; margin-left: -1.3em; }
+
+.sortable .sortable { list-style-type: none; margin: 10px 0px 0px 0px; padding: 0; }
+.sortable li .sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 18px; }
+
+.admin_icon { padding-left: 5px; }
+
+h1 { font-size: 18px; font-family: Tahoma; font-weight: normal; margin: 0px 0px 10px 0px; padding: 0px; }
+h2 { font-size: 14px; font-family: Tahoma; font-weight: bold; margin: 10px 0px 10px 0px; padding: 0px; }
+
