@@ -1,0 +1,54 @@
+{% extends "zinnia/_entry_detail_base.html" %}
+{% load url from future %} 
+{% load i18n %}
+
+{% block entry-title %}
+    <h2 class="entry-title">{{ object.title }}</h2>
+{% endblock %}
+
+{% block entry-comments %}{% endblock entry-comments %}
+
+{% block entry-image %}
+{% if object.image %}
+{% load thumbnail %}
+
+<div class="entry-image">
+	<div>		
+		{% if continue_reading %}
+		 <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="lightbox[{{ object.pk }}]">
+			<img src="{% thumbnail object.image '160x120' crop='smart' %}" alt="{{ object.title }}" class="left" /> 
+		</a>
+		{% else %}	
+		<a href="{% thumbnail object.image '800x600' %}" title="{{ object.title }}" rel="lightbox[{{ object.pk }}]">
+		<img src="{% thumbnail object.image '330x220' crop='smart' %}" alt="{{ object.title }}" class="left" />
+		</a>
+		{% endif %}		
+	</div>
+</div>
+
+{% endif %}
+{% endblock %}
+
+{% block entry-info %}{% endblock entry-info %}
+
+{% block entry-last-update %}
+{% if object.start_publication  %}
+<p class="entry-last-update">
+	<abbr class="updated" title="{{ object.start_publication|date:"c" }}">{{ object.start_publication|date:"DATE_FORMAT" }}</abbr>
+</p>
+{% endif  %}
+{% endblock %}
+
+{% block entry-tags %}
+{% endblock %}
+
+{% block entry-shorturl %}
+{% endblock entry-shorturl %}
+
+{% block entry-content %}
+<div class="entry-content">
+	<p>
+	{{ object_content }}
+	</p>
+</div>
+{% endblock %}

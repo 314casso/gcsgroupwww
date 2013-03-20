@@ -1,5 +1,5 @@
 """
-WSGI config for gcsgroupwww project.
+WSGI config for rusconwww project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -14,8 +14,11 @@ framework.
 
 """
 import os
+import sys
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gcsgroupwww.settings")
+sys.path.insert(0, '/opt/src/rusconwww')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rusconwww.settings")
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION

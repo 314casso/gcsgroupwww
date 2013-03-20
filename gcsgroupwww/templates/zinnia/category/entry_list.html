@@ -1,0 +1,69 @@
+{% extends "zinnia/entry_list.html" %}
+{% load i18n zinnia_tags %}
+{% load page_tags %}
+{% load cms_tags %}
+{% load url from future %} 
+
+{% block widepromo %}
+<div class="widepromo_sm">
+	<div class="container">
+		<div class="ship_sm">
+			<img border="0" width="162" height="100" src="{{ STATIC_URL }}ruscon/images/ship_sm.png" />			
+		</div>
+		<div class="prom_sm">
+			<p class="tit">
+				{% show_placeholder "bigpromo-title" category.id|get_page_reverce_id %}
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock widepromo %}
+
+{% block content %}
+<div class="small_column">
+{% include 'includes/small_column.html' with page_reverce_id=category.id|get_page_reverce_id %}	
+</div>
+<div class="big_column">
+	{% block content-title %}
+	{% if category %}
+	<h1>{% blocktrans %}{{ category }}{% endblocktrans %}</h1>
+	{% if category.description %}
+	<p>
+		{{ category.description|striptags|safe }}
+	</p>
+	{% endif %}
+	{% endif %}
+
+	{% if tag %}
+	<h1>{% blocktrans %}Tag archives: {{ tag }}{% endblocktrans %}</h1>
+	{% endif %}
+
+	{% if author %}
+	<h1>{% blocktrans %}Author archives: {{ author }}{% endblocktrans %}</h1>
+	{% endif %}
+	{% endblock %}
+
+	{% block content-loop %}
+<div class="spacer"></div>
+	{% for object in object_list %}
+	{% include object.content_template with object_content=object.excerpt|truncatewords_html:50|safe continue_reading=1 %}
+	{% empty %}
+	<p class="info">
+		<a href="{% url 'admin:zinnia_entry_add' %}">{% trans "No entries yet." %}</a>
+	</p>
+	{% endfor %}
+
+	{% endblock %}
+
+	{% block content-pagination %}
+	{% if is_paginated %}
+	<div class="scroller">
+		{% zinnia_pagination page_obj %}
+	</div>
+	{% endif %}
+	{% endblock %}
+
+	{% block content-related %}
+	{% endblock %}
+</div>
+{% endblock %}

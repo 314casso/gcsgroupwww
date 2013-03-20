@@ -1,0 +1,9 @@
+{% extends "includes/small_column.html" %}
+{% block submenu %}
+<div class="sub-menu">
+	<p>
+		{% load sitetree %}
+		{% sitetree_menu from 'mainmenu' include page_reverce_id template "includes/menu_line.html" %}
+	</p>
+</div>
+{% endblock submenu %}

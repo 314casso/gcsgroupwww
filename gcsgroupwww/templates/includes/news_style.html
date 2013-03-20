@@ -1,0 +1,18 @@
+{% load i18n %}
+<div class="news-block">
+  {% for object in entries %}
+  <p>
+    {{ object.creation_date|date:"SHORT_DATE_FORMAT"  }} | <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a>
+    {{ object.excerpt|striptags|safe }}
+  </p>
+  {% empty %}
+  <p>
+    {% trans "No entries yet." %}
+  </p>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+	{% load zinnia_tags %}
+	{% zinnia_pagination page_obj %}
+{% endif %}

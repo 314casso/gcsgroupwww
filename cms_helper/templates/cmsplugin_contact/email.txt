@@ -1,0 +1,9 @@
+Имя: {{ data.name }}
+Город: {{ data.town }}
+Email: {{ data.email }}
+Телефон: {{ data.phone }}
+
+Сообщение или вопрос:
+{{ data.content }}
+
+

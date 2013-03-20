@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load cms_tags sekizai_tags %}
+{% load page_tags %}
+
+{% block widepromo %}
+<div class="widepromo">
+	<div class="container">
+		<div class="ship">
+			<img border="0" width="439" height="272" src="{{ STATIC_URL }}ruscon/images/ship.png" />
+		</div>
+		<div class="prom">
+			<p class="tit">
+				{% placeholder "bigpromo-title" %}
+			</p>
+			<p class="tex">
+				{% placeholder "bigpromo-text" %}
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock widepromo %}
+
+{% block maincontent %}
+
+{% include 'includes/teaser_menu.html' with page_reverce_id='company' %}
+
+{% include 'includes/teaser_menu.html' with page_reverce_id='logistic' %}
+
+
+{% with page_reverce_id='press-releases' %}
+	<div class="item">			
+		{% get_menuitem page_reverce_id "includes/menu_item.html" %}
+		{% placeholder "press-releases" %}	
+	</div>
+{% endwith %}
+
+{% with page_reverce_id='news' %}
+	<div class="item">		
+		{% get_menuitem page_reverce_id "includes/menu_item.html" %}
+		{% placeholder "news" %}	
+	</div>
+{% endwith %}
+
+{% include 'includes/teaser_menu.html' with page_reverce_id='customs' %}
+
+{% include 'includes/teaser_menu.html' with page_reverce_id='perishable_goods' %}
+
+
+{% endblock maincontent %}

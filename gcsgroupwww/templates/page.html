@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load cms_tags sekizai_tags %}
+{% load page_tags %}
+
+{% block widepromo %}
+<div class="widepromo_sm">
+	<div class="container">
+		<div class="ship_sm">
+			<img border="0" width="162" height="100" src="{{ STATIC_URL }}ruscon/images/ship_sm.png" />			
+		</div>
+		<div class="prom_sm">
+			<p class="tit">
+				{% placeholder "bigpromo-title" inherit %}
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock widepromo %}
+
+{% block maincontent %}
+<div class="small_column">
+{% load page_tags %}
+{% include 'includes/small_column.html' with page_reverce_id=current_page.get_root.reverse_id %}	 	
+</div>
+<div class="big_column">        
+{% block entry-content %}
+<h1>{% placeholder "custom-title" or %}{% page_attribute page_title %}{% endplaceholder %}</h1>
+  {% placeholder "page-content" %}
+{% endblock %}
+</div>
+{% endblock maincontent %}

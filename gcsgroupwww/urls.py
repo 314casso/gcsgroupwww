@@ -1,17 +1,32 @@
-from django.conf.urls import patterns, include, url
+from django.conf import settings
+from django.conf.urls.defaults import patterns, include, url
+from django.contrib import admin
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'gcsgroupwww.views.home', name='home'),
-    # url(r'^gcsgroupwww/', include('gcsgroupwww.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
 )
+
+urlpatterns += staticfiles_urlpatterns()
+
+
+#urlpatterns += patterns('',
+#    url(r'^weblog/', include('zinnia.urls')),
+#    url(r'^comments/', include('django.contrib.comments.urls')),
+#)
+
+
+urlpatterns += patterns('',
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('cms.urls')), # <--------- include the django cms urls via i18n_patterns
+)
+
+if settings.DEBUG:
+    urlpatterns = patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+        url(r'', include('django.contrib.staticfiles.urls')),
+    ) + urlpatterns

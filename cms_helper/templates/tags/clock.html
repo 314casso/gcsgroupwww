@@ -1,0 +1,5 @@
+{% for clock in clocks %}
+<div class="clock">
+	<div class="time time{{ clock.hour_shift }}" title="-1"> </div><span class="city">{{ clock.town }}</span>
+</div>
+{% endfor %}

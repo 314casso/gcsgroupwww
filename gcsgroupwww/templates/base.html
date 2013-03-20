@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	{% load i18n %}
+	{% load url from future %}
+	{% load cms_tags sekizai_tags %}
+	{% load page_tags %}	
+	{% load url from future %} 
+	<head>
+		<title>{% block title %}{% page_attribute page_title %}{% endblock %}</title>
+		<meta name="description" content="{% block meta-description %}{% page_attribute meta_description %}{% endblock %}"/>
+		<meta name="keywords" content="{% block meta-keywords %}{% page_attribute meta_keywords %}{% endblock %}"/>
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/style.css">
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}libs/digital-clock/digital-clock.css"/>
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/form.css">
+		{% render_block "css" %}
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}libs/digital-clock/digital-clock.js"></script>
+		{% render_block "js" %}
+	</head>
+
+	<body>
+		<div class="wide">
+			<div class="container">
+
+				<div id="header">
+					<div id="logo">
+						<a href="/" title="РУСКОН"><img src="{{ STATIC_URL }}ruscon/images/logo.gif" width="221" height="50" border="0" alt="РУСКОН" /></a>
+					</div>
+
+					{% load page_tags %}{% clocks 6 %}
+
+				</div><!--end header-->
+
+			</div>
+		</div>
+
+		<div class="wideline">
+			&nbsp;
+		</div>
+		<!--menu-->
+		<div class="widemenu">
+			<div class="container">
+				<div class="topmenu">
+					<ul>
+						
+						{% load sitetree %}
+						{% sitetree_menu from "mainmenu" include "trunk" template "includes/top_menu.html" %}
+						
+						 
+						 {% for lang in LANGUAGES %}
+        					{% ifnotequal lang.0 LANGUAGE_CODE %}
+        					<li><a href="/{{lang.0}}{{request.path}}">{{ lang.0|human_lang }}</a></li>      					      
+        				{% endifnotequal %}
+    					{% endfor %}					
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--end menu-->
+
+		{% block widepromo %}{% endblock widepromo %}
+
+		<div class="wideline">
+			&nbsp;
+		</div>
+
+		<div class="container">
+			<div class="maincontent">	
+				<div class="line">&nbsp;</div>			
+				{% block maincontent %}
+				<div id="content" class="hfeed">
+					
+        {% block content %}{% endblock %}     
+      </div>
+				{% endblock maincontent %}
+			</div>
+		</div>
+
+		<div class="wideline">
+			&nbsp;
+		</div>
+		<div class="container">				
+			<div class="footer_menu">
+				{% show_placeholder "adresses" "global_placeholder" %}				
+			</div>
+
+			<div id="footer">
+				<p>
+				{% get_copyright %}	{% show_placeholder "get-copyright" "global_placeholder" %}
+					<br />				
+					{% sitetree_menu from "mainmenu" include "trunk" template "includes/menu_line.html" %}		
+				</p>
+				<div id="address">
+					<p>						
+						{% show_placeholder "liveinternet" "global_placeholder" %}
+					</p>
+				</div>
+			</div><!--end footer-->			
+		</div>
+
+	</body>
+</html>
