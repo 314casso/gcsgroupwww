@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% for object in entries %}
+<p>
+	<span class="label">{{ object.issue_date|date:"SHORT_DATE_FORMAT" }}</span>
+	<a href="{{ MEDIA_URL }}{{ object.attachment }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a>
+</p>
+{% empty %}
+<p>
+	{% trans "No entries yet." %}
+</p>
+
+{% endfor %}
+
+{% if is_paginated %}
+<div class="pagination">
+{% load zinnia_tags %}
+{% zinnia_pagination page_obj %}
+</div>
+{% endif %}

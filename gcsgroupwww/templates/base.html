@@ -1,147 +1,85 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	{% load i18n %}
-	{% load url from future %}
-	{% load cms_tags sekizai_tags %}
-	{% load page_tags %}
-	{% load url from future %}
+﻿<!DOCTYPE html>
+{% load i18n %}
+{% load url from future %}
+{% load cms_tags sekizai_tags %}
+{% load page_tags %}
+{% load cache menu_tags %}
+{% load url from future %}
+<html>
 	<head>
 		<title>{% block title %}{% page_attribute page_title %}{% endblock %}</title>
 		<meta name="description" content="{% block meta-description %}{% page_attribute meta_description %}{% endblock %}"/>
 		<meta name="keywords" content="{% block meta-keywords %}{% page_attribute meta_keywords %}{% endblock %}"/>
-		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/font2.css">
-		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/style.css">
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}libs/digital-clock/digital-clock.css"/>
-		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}ruscon/css/form.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="{{ STATIC_URL }}ruscon/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="{{ STATIC_URL }}ruscon/css/style.css" rel="stylesheet" media="screen">
+		<link href="{{ STATIC_URL }}ruscon/css/bootstrap-responsive.css" rel="stylesheet">
 		{% render_block "css" %}
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
-
-		<script type="text/javascript" src="{{ STATIC_URL }}ruscon/js/jquery.mousewheel.js"></script>
-		<script type="text/javascript" src="{{ STATIC_URL }}ruscon/js/jquery.ulslide.js"></script>
-
-		<script type="text/javascript" src="{{ STATIC_URL }}ruscon/js/default.js"></script>
+		<script src="{{ STATIC_URL }}ruscon/js/bootstrap.min.js"></script>
 		{% render_block "js" %}
 	</head>
-
 	<body>
+		<div class="container shadow" style="background: white;">
 
-		<div class="container">
-			<div class="container1">
-				<div class="container2">
-					<div id="language_switch">
+			<div class="row">
+				<div class="span10 header-image">
+					<p id="logo">
+						<img src="{{ STATIC_URL }}ruscon/images/logo-7.png">
+					</p>
+				</div>
+				<div class="span2">
+					<p id="lang" class="right">
 						{% for lang in LANGUAGES %}<a href="/{{lang.0}}{{request.path}}">{{ lang.0|human_lang|safe }}</a>{% endfor %}
-					</div>
-					<div id="icons">
-						<a href="/"><img src="{{ STATIC_URL }}ruscon/images/icon_home.gif" /></a>
-						<a href="/order/"><img src="{{ STATIC_URL }}ruscon/images/icon_contacts.gif" class="last" /></a>
-					</div>
-
-					{% block slideshow %}
-					<div id="header_index">
-						<ul class="clients_animation_fade">
-							<li><img src="{{ STATIC_URL }}ruscon/images/header_index5.jpg" />
-							</li>
-							<li><img src="{{ STATIC_URL }}ruscon/images/header_index2.jpg" />
-							</li>
-							<li><img src="{{ STATIC_URL }}ruscon/images/header_index3.jpg" />
-							</li>
-							<li><img src="{{ STATIC_URL }}ruscon/images/header_index4.jpg" />
-							</li>
-						</ul>
-					</div>
-					{% endblock slideshow %}
-
-					{% block header %}
-					<div id="header">
-						<div id="logo"></div>
-						<div id="logo_">
-							<a href="/"><img src="{{ STATIC_URL }}ruscon/images/gcs_logo.gif" width="189" height="78" alt="" title="" /></a>
-						</div>
-						<div id="phone"></div>
-						<div id="phone_">
-							<div id="clients_list">
-								{% show_placeholder "big-phones" "global_placeholder" %}
-							</div>
-							<div class="clear"></div>
-
-						</div>
-
-						<div id="menu"></div>
-						<div id="menu_">
-							{% load cache menu_tags %}
-							<ul>
-								{% show_menu 0 0 100 100 %}
-							</ul>
-						</div>
-
-						<div id="slogan">
-							{% placeholder "bigpromo-title" inherit %}
-						</div>
-					</div>
-					{% endblock header %}
-
-					<div id="content">
-						<div id="content_left">
-							{% block entry-content %}
-							<h1>{% placeholder "custom-title" or %}{% page_attribute title %}{% endplaceholder %}</h1>
-							{% placeholder "page-content" or %}
-							<ul>
-								{% load cache menu_tags %}
-								{% show_sub_menu 2 %}
-							</ul>
-							{% endplaceholder %}
-							{% endblock %}
-						</div>
-						<div id="content_right">
-							<div id="content_right_">
-
-								<div id="servicesmenu">
-									<ul>
-										{% show_menu_below_id "service" 0 100 100 100  'includes/menu.html' %}
-									</ul>
-								</div>
-
-								<div class="window_header">
-									{% show_placeholder "banners-title" "global_placeholder" %}
-								</div>
-								<div class="window_body">
-									<div id="clients">
-										<div id="clients_">
-											<ul class="clients_animation_slide">
-												{% show_placeholder "banners" "global_placeholder" %}
-											</ul>
-										</div>
-									</div>
-								</div>
-
-							</div>
-						</div>
-						<div class="clear"></div>
-					</div>
-
-					<div id="banners">
-
-					</div>
-
-					<div id="footer">
-						<div id="footer_left">
-							{% show_placeholder "adresses" "global_placeholder" %}
-						</div>
-						<div id="footer_right">
-							{% show_placeholder "liveinternet" "global_placeholder" %}
-						</div>
-						<div class="clear"></div>
-					</div>
-
-					<div id="authors">
-						{% get_copyright '2008' %}	{% show_placeholder "get-copyright" "global_placeholder" %}
-					</div>
-
+					</p>
 				</div>
 			</div>
-		</div>
 
+			<div class="navbar">
+				<div class="navbar-inner">
+					<a class="brand" href="/">GCS</a>
+					<ul class="nav">
+						{% show_menu 0 100 2 2 'includes/menu.html' %}
+					</ul>
+				</div>
+			</div>
+
+			{% block slideshow %}{% endblock slideshow %}
+
+			{% block content-container %}
+			<div class="row" id="content-container">
+				<div class="span3" id="sidebar">
+					{% block slidebar %}
+					<p>
+						<ul class="nav nav-pills nav-stacked">
+							{% show_menu 1 100 0 100 'includes/menu.html' %}
+						</ul>
+					</p>
+					{% endblock slidebar %}
+				</div>
+
+				<div class="span9">
+					{% block content %}
+					{% block entry-content %}
+					<h1>{% placeholder "custom-title" or %}{% page_attribute title %}{% endplaceholder %}</h1>
+					{% placeholder "page-content" or %}
+					<ul>
+						{% load cache menu_tags %}
+						{% show_sub_menu 2 %}
+					</ul>
+					{% endplaceholder %}
+					{% endblock %}
+					{% endblock content %}
+				</div>
+			</div>
+			{% endblock content-container %}			
+			<hr>
+			<footer>
+				<p class="muted">
+					{% get_copyright '2000' %}	{% show_placeholder "get-copyright" "global_placeholder" %}
+				</p>
+			</footer>
+		</div><!-- /container -->
 	</body>
 
 </html>

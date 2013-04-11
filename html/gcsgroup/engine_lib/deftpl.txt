@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+</head>
+
+<body>
+  <table>
+    <tr><td colspan="2"><img src="/engine/pics/logo.jpg" border="0" /></td></tr>
+    <tr>
+      <td>[MENU folder='-1'
+                prefix='<table>'
+                postfix='</table>'
+                format='<tr><td><a href="LINK_HREF">LINK_TEXT</a></td></tr>'
+          ]</td>
+      <td width="100%">[BODY]</td>
+    </tr>
+  </table>
+
+</body>
+</html>

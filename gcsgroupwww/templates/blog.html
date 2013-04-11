@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load cms_tags sekizai_tags %}
+{% load page_tags %}
+
+{% block slideshow %}{% endblock slideshow %}
+{% block slidebar %}
+<div>
+	{% placeholder sidebar %}
+</div>
+{% endblock slidebar %}
+
+{% block entry-content %}
+<h1>{% placeholder "custom-title" or %}{% page_attribute title %}{% endplaceholder %}</h1>
+{% placeholder "page-content" or %}
+<ul>
+	{% load cache menu_tags %}
+	{% show_sub_menu 2 %}
+</ul>
+{% endplaceholder %}
+{% endblock %}

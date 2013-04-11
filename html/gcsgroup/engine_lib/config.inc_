@@ -1,0 +1,26 @@
+<?
+@session_start();
+@session_register("engine_htroot");
+@session_register("engine_root");
+@session_register("engine_show_htroot");
+@session_register("engine_show_root");
+
+@session_register("db_host");
+@session_register("db_user");
+@session_register("db_pass");
+@session_register("db_name");
+
+$db_host="";
+$db_user="sk_aventura_user";
+$db_pass="sk_aventura_pass";
+$db_name="db_sk_aventura";
+$engine_root="/home/gcsgroup/engine_lib";
+$engine_htroot=$engine_show_htroot."/engine_lib";
+if (!$engine_show_root)
+	$engine_show_root=$dir;
+if (!$engine_show_htroot)
+	$engine_show_htroot=$htroot;
+
+$wrong_path_404=0;
+
+?>

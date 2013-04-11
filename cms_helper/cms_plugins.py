@@ -18,6 +18,9 @@ from cms.plugins.text.models import Text
 from cms.plugins.text.forms import TextForm
 from cms_helper.forms import PlainTextForm
 from gcsgroupwww.local_settings import DEFAULT_FROM_EMAIL
+from rdoc.models import Doc
+from cms.models.pluginmodel import CMSPlugin
+from contactlist.cms_plugins import BaseListPlugin
 
 class CustomContactPlugin(ContactPlugin):
     name = _("Custom Contact Form")
@@ -43,14 +46,14 @@ class CustomContactPlugin(ContactPlugin):
             }),
             DEFAULT_FROM_EMAIL,
             [site_email],
-            headers = {
+            headers={
                 'Reply-To': form.cleaned_data['email']
             },)
         email_message.send(fail_silently=False)
     
     fieldsets = (
         (None, {
-                'fields': ('site_email', 'name_label', 'email_label',  'phone_label', 'town_label', 
+                'fields': ('site_email', 'name_label', 'email_label', 'phone_label', 'town_label',
                            'subject_label', 'content_label', 'thanks',
                            'submit'),
         }),
@@ -73,7 +76,7 @@ class CMSCategoryEntriesPlugin(CMSQueryEntriesPlugin):
     name = _('Category entries')
     def render(self, context, instance, placeholder):
         """Update the context with plugin's data"""
-        entries = Entry.published.filter(categories__id__in=[instance.query]) #@UndefinedVariable
+        entries = Entry.published.filter(categories__id__in=[instance.query])  # @UndefinedVariable
         if instance.number_of_entries:
             entries = entries[:instance.number_of_entries]
         
@@ -108,7 +111,7 @@ class PlainTextPlugin(CMSPluginBase):
 
         def render(self, context, instance, placeholder):
                 context.update({
-                        'body': instance.body, 
+                        'body': instance.body,
                         'placeholder': placeholder,
                         'object': instance
                 })
@@ -120,4 +123,14 @@ class PlainTextPlugin(CMSPluginBase):
         form, change)
 
 plugin_pool.register_plugin(PlainTextPlugin)
-    
+
+
+class DocPlugin(BaseListPlugin):
+    model = CMSPlugin
+    name = _("Docs")
+    render_template = "docplugin/doclist.html"
+    limit = 20
+    def get_qset(self):
+        return Doc.objects.all()
+       
+plugin_pool.register_plugin(DocPlugin)    

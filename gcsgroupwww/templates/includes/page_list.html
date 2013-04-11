@@ -1,0 +1,7 @@
+{% load i18n %}
+
+<ul class="nav nav-tabs nav-stacked">
+{% for item in page_list %}	 
+	<li><a href="{{ item.url }}">{{ item.title }} &raquo;</a></li>		 
+{% endfor %}
+</ul>

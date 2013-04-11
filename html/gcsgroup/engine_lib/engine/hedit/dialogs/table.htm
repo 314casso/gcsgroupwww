@@ -1,0 +1,202 @@
+<html>
+<head>
+<title>Таблица</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<STYLE>
+BODY, TD, INPUT {font-size: 9pt;font-family:Arial} 
+.butClass { border:1px solid #D6D3CE;width:20px;height:20px }
+</STYLE>
+<script language="JavaScript">
+var colorSet = [
+'#FF0000','#FFFF00','#00FF00','#00FFFF','#0000FF','#FF00FF','#FFFFFF','#F5F5F5','#DCDCDC','#FFFAFA',
+'#D3D3D3','#C0C0C0','#A9A9A9','#808080','#696969','#000000','#2F4F4F','#708090','#778899','#4682B4',
+'#4169E1','#6495ED','#B0C4DE','#7B68EE','#6A5ACD','#483D8B','#191970','#000080','#00008B','#0000CD',
+'#1E90FF','#00BFFF','#87CEFA','#87CEEB','#ADD8E6','#B0E0E6','#F0FFFF','#E0FFFF','#AFEEEE','#00CED1',
+'#5F9EA0','#48D1CC','#00FFFF','#40E0D0','#20B2AA','#008B8B','#008080','#7FFFD4','#66CDAA','#8FBC8F',
+'#3CB371','#2E8B57','#006400','#008000','#228B22','#32CD32','#00FF00','#7FFF00','#7CFC00','#ADFF2F',
+'#98FB98','#90EE90','#00FF7F','#00FA9A','#556B2F','#6B8E23','#808000','#BDB76B','#B8860B','#DAA520',
+'#FFD700','#F0E68C','#EEE8AA','#FFEBCD','#FFE4B5','#F5DEB3','#FFDEAD','#DEB887','#D2B48C','#BC8F8F',
+'#A0522D','#8B4513','#D2691E','#CD853F','#F4A460','#8B0000','#800000','#A52A2A','#B22222','#CD5C5C',
+'#F08080','#FA8072','#E9967A','#FFA07A','#FF7F50','#FF6347','#FF8C00','#FFA500','#FF4500','#DC143C',
+'#FF0000','#FF1493','#FF00FF','#FF69B4','#FFB6C1','#FFC0CB','#DB7093','#C71585','#800080','#8B008B',
+'#9370DB','#8A2BE2','#4B0082','#9400D3','#9932CC','#BA55D3','#DA70D6','#EE82EE','#DDA0DD','#D8BFD8',
+'#E6E6FA','#F8F8FF','#F0F8FF','#F5FFFA','#F0FFF0','#FAFAD2','#FFFACD','#FFF8DC','#FFFFE0','#FFFFF0',
+'#FFFAF0','#FAF0E6','#FDF5E6','#FAEBD7','#FFE4C4','#FFDAB9','#FFEFD5','#FFF5EE','#FFF0F5','#FFE4E1'];
+
+function selOn(ctrl)
+{ ctrl.style.borderColor = '#546697';
+  ctrl.style.backgroundColor = '#B5BED6';    
+  ctrl.style.cursor = 'hand'; }
+
+function selOff(ctrl)
+{ ctrl.style.borderColor = '#D6D3CE';
+  ctrl.style.backgroundColor = '#D6D3CE'; }
+
+function selDown(ctrl)
+{ ctrl.style.backgroundColor = '#8492B5';  }
+
+function selUp(ctrl)
+{ ctrl.style.backgroundColor = '#B5BED6';  }
+
+function insColor(oColor) {
+ eval('tableForm.'+colorType).value=oColor;
+}
+function hideColor(){
+ colorMenu.style.visibility='hidden';
+}
+var colorType='table_backgroundcolor';
+
+var myTable = window.opener;
+
+function attr(name, value) {
+	if (!value || value == "") return "";
+	return ' ' + name + '="' + value + '"';
+}
+
+   function explore(obj, pnt) {
+      var i;
+      for (i in obj) {
+         alert(i +"="+obj[i]);
+      }
+   }
+
+function insertTable() {
+
+   // use DOM functions to create the table in the dlg_ins_table window
+   // and then return the innerHTML of the DIV containing the table
+
+	var nRows = tableForm.table_rows.value ? parseInt(tableForm.table_rows.value) : 2;
+	var nCols = tableForm.table_cols.value ? parseInt(tableForm.table_cols.value) : 2;
+
+   // create the div that will contain the table
+   var d = document.body.appendChild( document.createElement("DIV") );
+
+   // create the table in the div
+   var t = d.appendChild( document.createElement("TABLE") );
+   var tb = t.appendChild( document.createElement("TBODY") );
+   
+	for (var i = 0; i < nRows; i++) {
+      var tr = tb.appendChild( document.createElement("TR") );
+		for (var j = 0; j < nCols; j++) {
+            var td = tr.appendChild( document.createElement("TD") );
+/*            if (tableForm.table_rowheight.value)
+             td.style.height = tableForm.table_rowheight.value;
+            if (tableForm.table_colwidth.value)
+             td.style.width = tableForm.table_colwidth.value;
+			 */
+		}
+	}
+
+   // set table properties
+   t.border = 1;/*tableForm.table_border.value;
+   t.width = tableForm.table_width.value;
+   t.heightr = tableForm.table_height.value;
+   t.bordercolor = tableForm.table_bordercolor.value;*/
+   t.cellspacing = 0;/*tableForm.table_cellspacing.value;*/
+   t.cellpadding = 0;/*tableForm.table_cellpadding.value;
+   t.bgcolor = tableForm.table_backgroundcolor.value;*/
+   window.returnValue = d.innerHTML;
+   myTable.thePlace.pasteHTML(d.innerHTML);
+   window.close();
+}
+
+function cancel() {
+	window.returnValue = null;
+	window.close();
+}
+</script>
+</HEAD>
+<body bgcolor="#D6D3CE">
+
+<form name=tableForm>
+<table border="0" cellspacing="0" cellpadding="2">
+
+<td>
+<table style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="200">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=4>Отображение</td>
+</tr>
+<tr>
+<td>Колонок:</td>
+<td><input type="text" name="table_cols" size="2" value="2"></td>
+<!-- <td>Ширина:</td>
+<td><input type="text" name="table_width" size="2" value="100%"></td>
+ --></tr>
+<tr>
+<td>Строк:</td>
+<td><input type="text" name="table_rows" size="2" value="2"></td>
+<!-- <td>Высота:</td>
+<td><input type="text" name="table_height" size="2" value=""></td>
+ --></tr>
+</table>
+</td>
+<!--
+<td>
+<table height="100%" style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="120">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=2>Отступы ячеек</td>
+</tr>
+<tr>
+<td>Внутри:</td>
+<td><input type="text" name="table_cellpadding" size="2" value="0"></td>
+</tr>
+<td>Снаружи:</td>
+<td><input type="text" name="table_cellspacing" size="2" value="0"></td>
+</tr>
+</table>
+</td>
+</table>
+
+<table border="0" cellspacing="0" cellpadding="2">
+<td>
+<table style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="200">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=3>Цвета и рамки</td>
+</tr>
+<tr>
+<td>Фон:</td>
+<td><img alt="Выберите цвет" class="butClass" src="cl.gif" onMouseOver="selOn(this)" onMouseOut="selOff(this)" onMouseDown="selDown(this)" onMouseUp="selUp(this)" onClick="colorType='table_backgroundcolor';colorMenu.style.marginTop='0px';colorMenu.style.visibility='visible'">
+<div onClick="hideColor()" id="colorMenu" onmouseover="this.style.visibility='visible'" onmouseout="this.style.visibility='hidden'" STYLE="background-color:#D6D3CE;margin-left:-22px;margin-top:0px;border:1px solid black;position:absolute;visibility:hidden">
+<nobr>
+<script>
+for (s=0;s<colorSet.length;s++){
+ document.write('<img src="no.gif" width="9" style="background-color:'+colorSet[s]+';" onClick="insColor(\''+colorSet[s]+'\')">');
+ if ((s+1)/20==parseInt((s+1)/20)) document.write('<br>');
+}
+</script>
+</div>
+</td>
+<td><input type="text" name="table_backgroundcolor" size="7" value=""></td>
+</tr>
+<tr>
+<td>Цвет рамки:</td>
+<td><img alt="Выберите цвет" class="butClass" src="cl.gif" onMouseOver="selOn(this)" onMouseOut="selOff(this)" onMouseDown="selDown(this)" onMouseUp="selUp(this)" onClick="colorType='table_bordercolor';colorMenu.style.marginTop='30px';colorMenu.style.visibility='visible'"></td>
+<td><input type="text" name="table_bordercolor" size="7" value="black"></td>
+</tr>
+<tr>
+<td>Ширина рамки:</td>
+<td>&nbsp;</td>
+<td colspan=2><input type="text" name="table_border" size="7" value="1"></td>
+</tr>
+</table>
+</td>
+<td>
+<table height="100%" style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="120">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=2>Размеры ячеек</td>
+</tr>
+<tr>
+<td>Высота:</td>
+<td><input type="text" name="table_rowheight" size="4"></td>
+</tr>
+<tr>
+<td>Ширина:</td>
+<td><input type="text" name="table_colwidth" size="4"></td> -->
+</tr>
+</table>
+<input class="button" type="button" value="Готово" title="Insert Table" onclick="insertTable()">&nbsp;<input class="button" type="button" value="Отмена" title="Cancel Dialog" onclick="cancel()">
+</td>
+</table>
+</form>
+</body>
+</html>

@@ -102,6 +102,7 @@ CMS_TEMPLATES = (
     ('base.html', 'Base Template'),
     ('home.html', 'Home Template'),
     ('page.html', 'Page Template'),
+    ('blog.html', 'Blog Template'),
     ('global_placeholder.html', 'Global Placeholder'),
 )
 
@@ -120,7 +121,7 @@ CACHES = {
 }
 
 ZINNIA_PAGINATION = 10
-CMSPLUGIN_ZINNIA_TEMPLATES = [('includes/news_style.html', 'News style')]
+CMSPLUGIN_ZINNIA_TEMPLATES = [('includes/news_style.html', 'News style'), ('includes/news_list.html', 'News list')]
 
 from django.utils.translation import ugettext_lazy as _
 CMSPLUGIN_FILER_FOLDER_VIEW_OPTIONS = (("list", _("List")),("slideshow",_("Slideshow")), ("simplelist", _("Simple list")))
@@ -154,7 +155,7 @@ INSTALLED_APPS = (
     'cms.plugins.link',
     'cms.plugins.file',
     'cms.plugins.snippet',
-    'cms.plugins.googlemap',    
+    'cms.plugins.googlemap',       
     'sekizai',
     'cms_helper',
     'django.contrib.comments',
@@ -169,5 +170,9 @@ INSTALLED_APPS = (
     'cmsplugin_filer_folder',
     'cmsplugin_filer_image',
     'cms.plugins.teaser',    
-    'cms_helper.cms_plugins',
+    'cms_helper.cms_plugins',    
+    'cms.plugins.flash',
+    'rdoc',
+    'contactlist',
+    'orderedmodel',
 )

@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load thumbnail %}
+
+
+{% for object in entries %}
+  	<div class="row" style="margin-bottom: 4px">
+	<div class="thumbnail span1">
+	      <img src="{% thumbnail object.image '130x140' %}" title="{{ object.fio }}" alt="{{ object.post }}" />      
+	</div>
+    
+    <div class="span5">
+	    <strong class="label">{{ object.fio }}</strong>
+	    <p>{{ object.post }}</p>
+    </div>
+    </div>
+{% empty %}
+<p>
+	{% trans "No entries yet." %}
+</p>
+{% endfor %}
+
+
+{% if is_paginated %}
+<div class="pagination">
+{% load zinnia_tags %}
+{% zinnia_pagination page_obj %}
+</div>
+{% endif %}
+

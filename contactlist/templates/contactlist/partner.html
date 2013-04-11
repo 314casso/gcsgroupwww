@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load thumbnail %}
+
+
+{% for object in entries %}
+  	<div class="row" style="margin-bottom: 4px;">
+	<a style="margin-top: 15px" class="thumbnail span2" href="{{ object.url }}">
+	      <img src="{% thumbnail object.image '130x140' %}" alt="{{ object.title }}" title="{{ object.title }}" />
+	</a>      
+	
+    
+    <div class="span5">
+	    <h5>{{ object.title }}</h5>
+	    <p>{{ object.description }}</p>
+    </div>
+    </div>
+{% empty %}
+<p>
+	{% trans "No entries yet." %}
+</p>
+{% endfor %}
+
+
+{% if is_paginated %}
+<div class="pagination">
+{% load zinnia_tags %}
+{% zinnia_pagination page_obj %}
+</div>
+{% endif %}
+

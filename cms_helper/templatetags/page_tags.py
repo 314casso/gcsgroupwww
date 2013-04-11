@@ -2,7 +2,6 @@
 from django import template
 import datetime
 from cms.models.pagemodel import Page
-from django.template import loader
 from django.template.context import Context
 from gcsgroupwww.settings import STATIC_URL
 
@@ -12,10 +11,18 @@ register = template.Library()
 def get_copyright(value):
     return u'© %s—%s' % (value, datetime.datetime.now().year)
 
-@register.filter()
-def get_root_page_reverse_id(value):
-    page = Page.objects.get(reverse_id=value)
-    return page.get_root().reverse_id
+@register.inclusion_tag('includes/page_list.html')
+def get_pages(value):
+    pages = Page.objects.filter(parent__reverse_id=value)
+    result = []
+    for page in pages:
+        obj = {
+               'title': page.get_title() ,
+               'description': page.get_title_obj_attribute('meta_description') , 
+               'url': page.get_absolute_url()
+               }     
+        result.append(obj)       
+    return {'page_list': result}
     
 @register.filter()
 def human_lang(lang):    

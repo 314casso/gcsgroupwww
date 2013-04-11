@@ -1,0 +1,45 @@
+body
+{
+	margin: 0px;
+	font-family: Tahoma;
+	font-size: 10pt;
+}
+
+tr, td, p, div
+{
+	font-family: Tahoma;
+	font-size: 10pt;	
+}
+
+td.textdoc
+{
+	padding: 5px;
+}
+
+img.textdoc
+{
+	margin: 10px;
+}
+
+a
+{
+	color: #143E71;
+	text-decoration: none;
+}
+
+a:hover
+{
+	color: #3E8CC6;
+	text-decoration: underline;
+}
+
+.copyright
+{
+	font-size: 8pt;	
+}
+
+table.textdoc, td.textdoc, tr.textdoc
+{
+	border-color: #E7D9BE;
+	border-style: solid;
+}

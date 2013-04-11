@@ -1,0 +1,236 @@
+body
+{
+	background: #f0f0f0;
+}
+
+tr, th, p
+{
+	font: 8pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: #000000;
+}
+
+.com_input, textarea, select
+{
+	border: 1px solid #959595;
+	font: 10pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: #000000;
+}
+
+.com_button
+{
+	border: 1px solid #959595;
+	background-color: #6d92ac;
+	font: 8pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+
+.com_select
+{
+	border: 1px solid #959595;
+	font: 8pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: #000000;
+}
+
+.line
+{
+	border: 1px solid #959595;
+	background-color: #f8f8f8;
+}
+
+.line_blue
+{
+	border: 1px solid #053251;
+	background-color: White;
+}
+
+td.td_blue
+{
+	background-color: #2f6081;
+	color: White;
+}
+
+td.td_blue2
+{
+	background-color: #38739b;
+	color: White;
+}
+
+.cat
+{
+	color: #595959;
+	font: bold 8pt Tahoma;
+}
+
+th
+{
+	background-color: #225371;
+	color: #FFFFFF;
+	font: bold 10pt Tahoma;
+}
+
+th.error
+{
+	background-color: #b70000;
+	color: #FFFFFF;
+	font: bold 10pt Tahoma;
+}
+
+div.null_div
+{
+	margin: 0;
+	padding: 0;
+}
+
+.logout
+{
+	background-color: #264e67;
+	color: White;
+	text-decoration: underline;
+	padding: 2px;
+}
+
+a.logout:hover
+{
+	text-decoration: none;
+}
+
+.tree
+{
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+a.tree
+{
+	color: Black;
+	text-decoration: none;
+}
+
+a.tree_selected
+{
+	font-family: Arial, Helvetica, sans-serif;
+	color: White;
+	text-decoration: none;
+	background-color: #3a769b;
+}
+
+textarea.courier
+{
+	font-family: "Courier New", Courier, monospace;
+}
+
+.line_1_1
+{
+	background-image: url('img/line_1.gif');
+	background-position: 16px 0px;
+}
+
+.tree_td
+{
+	padding-left: 3px;
+}
+
+.com_link
+{
+	color: #21506E;
+}
+
+a.com_link:hover
+{
+	text-decoration: none;
+}
+
+.table_bookmark
+{
+	border: 1px solid #5e5d62;
+	background-color: White;
+	width: 120px;
+}
+
+.td_bookmark_on
+{
+	background-color: #f78200;
+}
+
+.td_bookmark_off
+{
+	background-color: #38739b;
+}
+
+.table_bookmark2
+{
+	border: 1px solid #5e5d62;
+	background-color: White;
+	width: 120px;
+}
+
+a.bookmark2
+{
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+.td_bookmark2_on
+{
+	background-color: #2DC860;
+}
+
+.td_bookmark2_off
+{
+	background-color: #D5D5D5;
+}
+
+.doc_menu
+{
+	color: White;
+	font-weight: bold;
+}
+
+a.doc_menu
+{
+	text-decoration: underline;
+}
+
+a.doc_menu:hover
+{
+	text-decoration: none;
+}
+
+a
+{
+	color: Black;
+}
+
+a:hover
+{
+	text-decoration: none;
+}
+
+.row2
+{
+	background-color: #D5D5D5;
+	color: #5E5E5E;
+}
+
+a.cat
+{
+	text-decoration: underline;
+}
+
+a.cat:hover
+{
+	text-decoration: none;
+}
+
+.rub_ul
+{	padding: 0px;
+	margin: 0px 0px 0px 20px;
+}
+
+.rub_li
+{	list-style-type: none;
+}
+
+.row2_text
+{
+	color: #5E5E5E;
+}

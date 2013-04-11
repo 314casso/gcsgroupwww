@@ -1,25 +1,8 @@
 {% load i18n %}
-<div id="faq">
-    <ul>
-        {% for object in entries %}
-        <li>
-            <p>
-                <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a>
-            </p>
-            <p>
-                {{ object.excerpt|striptags|safe }}
-            </p>
-            <p>
-                {{ object.creation_date|date:"SHORT_DATE_FORMAT"  }}
-            </p>
-            {% empty %}
-            <p>
-                {% trans "No entries yet." %}
-            </p>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+
+{% for object in entries %}
+{% include "zinnia/_entry_detail_list.html" with object_content=object.excerpt|safe continue_reading=1 %}
+{% endfor %}
 
 {% if is_paginated %}
 {% load zinnia_tags %}

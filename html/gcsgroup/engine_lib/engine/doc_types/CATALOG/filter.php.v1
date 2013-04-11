@@ -1,0 +1,343 @@
+<style>
+.sel_search{
+	font-size:10px;
+	margin-top:2px;
+}
+TABLE.trr {
+	BORDER-COLLAPSE: collapse
+}
+TABLE.trr TR {
+	background-color:#E8E8E8;
+}
+TABLE.trr TD {
+	PADDING: 3px;MARGIN: 0px;
+}
+TABLE.trr TH {
+	PADDING: 3px;MARGIN: 0px;
+}
+</style>
+<?php
+// делаем фильтры дл€ catalog
+//делаем автомат, который по id - $id_arr формирует фильтр и делает выборку моделей
+//
+
+global $house_arr;
+global $house_arr;
+
+/************************** задаем параметры которые будут использоватьс€ в фильтре, все остально (шаблон, значени€, ...) беретс€ из бд ***/
+
+
+$filter_text = "<form method=\"get\" action=\"\" name=\"filter\">
+<table border=\"0\" class=\"trr\" width=\"100%\">
+<tr>
+<td>
+ќкруг<br />
+[fld503]
+</td>
+<td>
+ћетро<br />
+[fld516]
+</td>
+<td>
+ћетро2<br />
+[fld502]
+</td>
+<td>
+<br /><input name=\"\" type=\"submit\" value=\"ѕодобрать\">
+</td>
+</tr>
+</table>
+</form>";
+/*-----------------------------------------------------------------------*/
+//попытаемс€ выташить id характеристик которые будут использоватьс€ в фильтре
+preg_match_all("'\[fld(.*?)\]'i",$filter_text,$par_arr);
+if (count($par_arr) == 2){
+	for ($i=0;$i < count($par_arr[1]);$i++){
+		if ($par_arr[1][$i]) {
+			$id_arr[] = $par_arr[1][$i];
+			if (is_numeric($_GET["par".$i])){
+				$form_id[] = $_GET["par".$i];
+			}
+  		}
+	}
+
+	for ($i=0;$i < count($id_arr);$i++){
+		//узнаем тип данных, если тип данных select то выборка по таблице engine_CATALOG_possvals иначе по engine_CATALOG_values
+		$f = return_type_date($id_arr[$i]);
+		if ($f[select]){
+			//тип селект
+			$sql = "select * from engine_CATALOG_possvals where param = ".$id_arr[$i]." and id != 216";
+		}
+		else{
+			$sql = "select value as val, value as id from engine_CATALOG_values where param = ".$id_arr[$i]." group by value";
+		}
+		$r2 = mysql_query("$sql") or die (mysql_error());
+		//формируем  селект html
+		$text_select = "<select name=\"par".$i."\" class=\"sel_search\">\n";
+		$text_select .= "<option value=''>--------------</option>\n";
+
+		$date_sql_arr = array();
+		while ($select_value = mysql_fetch_array($r2)) {
+			$date_sql_arr[] = $select_value;
+		}
+		usort($date_sql_arr, "low"); //сортируем
+		for ($ii=0;$ii < count($date_sql_arr);$ii++){
+			$selected = '';
+			if ($form_id[$i] == $date_sql_arr[$ii][id]) {
+				$selected = " selected";
+				$pr_link .= "par".$i."=".$form_id[$i]."&";
+			}
+			$text_select .="<option value=\"".$date_sql_arr[$ii][id]."\"".$selected.">".$date_sql_arr[$ii][val]."</option>\n";
+		}
+		$text_select .= "</select>";
+		$filter_text = str_replace("[fld".$id_arr[$i]."]",$text_select,$filter_text);
+	}
+}
+
+//$filter_text;
+$id_doc = $id;
+/*-----------------------------------------------------------------------*/
+//теперь вытаскиваем модели.
+$house_arr = array();
+if (!count($form_id)){
+	$sql = "select 
+			ci.ord,
+			ci.price,
+			ci.name,
+			d.id as id_d
+		from 
+			engine_documents d,
+			engine_CATALOGITEM ci
+		where 
+			d.visible=1 and 
+			ci.doc_id=d.id and
+			d.pid=".$id_doc."
+
+		order by ci.ord,ci.name $limit";
+	$r_item = mysql_query("$sql") or die (mysql_error());
+	while ($item = mysql_fetch_array($r_item)) {
+		$house_arr[] = $item[id_d];
+	}
+}
+else{
+	for ($i=0;$i < count($form_id);$i++){
+
+		if (is_numeric($form_id[$i]) && $no_result != 1){
+			//узнаем тип переменной
+			$type_val = return_type_date($id_arr[$i]);
+			if (count($house_arr)) {
+				$where = " d.id in (".implode(', ', $house_arr).") and";
+				$house_arr = array();
+			}
+			if ($type_val[select]){
+				//тип селект
+				$sql = "select 
+					ci.ord,
+					ci.price,
+					ci.name,
+					d.id as id_d
+				from 
+					engine_documents d,
+					engine_CATALOGITEM ci,
+					engine_CATALOG_param as ecp,
+					engine_CATALOG_values ecv,
+					engine_CATALOG_possvals as ecpo
+				where 
+					d.visible=1 and 
+					ci.doc_id=d.id and 
+					ecp.catalog = d.pid and
+					ecp.id = '".$id_arr[$i]."' and
+					d.pid=".$id_doc." and 
+					ecv.item = d.id and
+					ecv.param=ecp.id and
+					".$where."
+					ecpo.id = ecv.poss_val_id and
+					ecpo.id = ".$form_id[$i]."
+				order by ci.ord,ci.name $limit";
+			}
+			else{
+				//$sql = "select * from engine_CATALOG_values where param = ".$id_arr[$i]."";
+				$sql = "select 
+					ci.ord,
+					ci.price,
+					ci.name,
+					d.id as id_d
+				from 
+					engine_documents d,
+					engine_CATALOGITEM ci,
+					engine_CATALOG_param as ecp,
+					engine_CATALOG_values ecv
+				where 
+					d.visible=1 and 
+					ci.doc_id=d.id and 
+					ecp.catalog = d.pid and
+					ecp.id = '".$id_arr[$i]."' and
+					d.pid=".$id_doc." and 
+					ecv.item = d.id and
+					".$where."
+					ecv.param=ecp.id and
+					ecv.value = ".$form_id[$i]."
+				order by ci.ord,ci.name";
+
+			}
+			//echo $sql;
+
+			$r_item = mysql_query("$sql") or die (mysql_error());
+			while ($item = mysql_fetch_array($r_item)) {
+				$house_arr[] = $item[id_d];
+			}
+
+			if (count($house_arr) == 0) $no_result = 1;
+		}	
+	}
+
+	if (is_numeric($price) && $no_result != 1){
+
+		if (count($house_arr)) $where = " d.id in (".implode(', ', $house_arr).") and";
+		if ($low_arr[$price]) $where .= " ci.price >= '".$low_arr[$price]."' and";
+		if ($high_arr[$price]) $where .= " ci.price <= '".$high_arr[$price]."' and";
+		//по цене
+		$sql = "select 
+				ci.ord,
+				ci.price,
+				ci.name,
+				d.id as id_d
+			from 
+				engine_documents d,
+				engine_CATALOGITEM ci
+			where 
+				d.visible=1 and 
+				ci.doc_id=d.id and
+				".$where."
+				d.pid=".$id_doc."
+			order by ci.ord,ci.name $limit";
+		//echo $sql;
+		$r_item = mysql_query("$sql") or die (mysql_error());
+		$house_arr = array();
+		while ($item = mysql_fetch_array($r_item)) {
+			$house_arr[] = $item[id_d];
+		}
+	}
+}
+/*-----------------------------------------------------------------------*/
+//вытаскиваем шаблоны
+$sql = "select short_format, icount,  prefix,  postfix from engine_CATALOG where doc_id = ".$id_doc."";
+$r = mysql_query("$sql") or die (mysql_error());
+$f_tmp = mysql_fetch_array($r);
+/*-----------------------------------------------------------------------*/
+//делаем листинг
+$limit = $f_tmp[icount];
+if (!$_GET[page]) $_GET[page] = 1;
+if (count($house_arr) > $limit ) {
+	$page = $_GET[page];
+	$count = count($house_arr);
+	$i = 0;
+	if ($page != 1)
+		$pages .= "<a href='?page=1'><<<</a>&nbsp;&nbsp;";
+	while ($p < $count) {
+		$i++;
+		if ($i != $page)
+			$pages .= "<a href='?page=$i'>$i</a>&nbsp;&nbsp;";
+		else
+			$pages .= "<b>$i</b>&nbsp;&nbsp;";
+		$p+=$limit ;
+	} 
+	if ($page*$limit < $count)
+		$pages .= "<a href='?page=" . ($i) . "'>>>></a>&nbsp;&nbsp;";
+}
+$house_arr = array_slice($house_arr, ($page-1)*$limit, $limit); 
+$pages=str_replace("page",$pr_link."page",$pages);
+//if ($pages) echo "<br>—траницы " . $pages . "<br>";
+
+$text = $f_tmp[short_format];
+/*-----------------------------------------------------------------------*/
+//попытаемс€ выташить id характеристик
+preg_match_all("'\[fld(.*?)\]'i",$text,$par_arr);
+if (count($par_arr) == 2){
+	for ($i=0;$i < count($par_arr[1]);$i++){
+		if ($par_arr[1][$i]) {
+			$arr_ch[] = $par_arr[1][$i];
+			//узнаем тип
+			$type[$par_arr[1][$i]] = return_type_date($par_arr[1][$i]);
+  		}
+	}
+}
+
+/*-----------------------------------------------------------------------*/
+if (count($house_arr)){
+	for ($i=0;$i < count($house_arr);$i++){
+		$text_search = $text;
+		$text_search = str_replace("[LINK]",geturl($house_arr[$i]),$text_search);
+
+		for ($ii = 0; $ii < count($arr_ch); $ii++){
+
+			if ($type[$arr_ch[$ii]][select] == 1){
+
+				$sql = "select 
+						ecpo.*
+					from 
+						engine_CATALOG_param as ecp,
+						engine_CATALOG_values ecv,
+						engine_CATALOG_possvals as ecpo
+					where 
+						ecp.id = '".$arr_ch[$ii]."' and
+						ecv.param=ecp.id and
+						ecpo.id = ecv.poss_val_id and
+						ecv.item = ".$house_arr[$i]."";
+
+				//echo $sql;
+				$r1 = mysql_query("$sql") or die (mysql_error());
+				while ($item = mysql_fetch_array($r1)) {
+
+					$text_search = str_replace("[fld".$arr_ch[$ii]."]",$item[val],$text_search);
+				}
+
+				
+			}
+			elseif ($type[$arr_ch[$ii]][type] == "»зображение") {
+				$pic = "$engine_show_htroot/engine/pics/catalog/0.gif";
+				$pic = "$engine_show_htroot/engine/pics/catalog/p_" . $type[$arr_ch[$ii]][id] . "_" . $house_arr[$i] . ".jpg";
+				$text_search = str_replace("[fld".$arr_ch[$ii]."]",$pic,$text_search);
+
+			} 
+			else{
+				$sql = "select * from engine_CATALOG_values where item={$house_arr[$i]} and param = ".$arr_ch[$ii];
+				$r1 = mysql_query("$sql") or die (mysql_error());
+				$f1 = mysql_fetch_array($r1);
+				$text_search = str_replace("[fld".$arr_ch[$ii]."]",$f1[value],$text_search);
+
+			}
+		}
+		$text_search_all .= $text_search;
+	}
+}
+else{
+	$text_search_all .= "<tr>\n<td></td>ѕо вашему запросу ничего не найдено</tr>\n"; 
+	$tt = '<br>';
+}
+
+/*-----------------------------------------------------------------------*/
+$text_search_all = "<br>".$f_tmp[prefix].$text_search_all.$f_tmp[postfix];
+if ($pages) $text_search_all = str_replace("[pages]","—траницы " . $pages . "<br><br>",$text_search_all);
+else $text_search_all = str_replace("[pages]",$tt,$text_search_all);
+//echo $text_search_all;
+//echo $text_total_select;
+/*-----------------------------------------------------------------------*/
+ /********** возврат типа данных*************************/
+function return_type_date($id_date){
+	//возврат типа данных
+	$sql = "select * from engine_CATALOG_param where id = ".$id_date;
+	$r = mysql_query("$sql") or die (mysql_error());
+	$f = mysql_fetch_array($r);
+	return $f;
+}
+ /********** ¬спомогательна€ функци€ дл€ сортировки *************************/
+  function low($a, $b) 
+  {
+	if ($a['val'] == $b['val'])
+	{
+		return strcmp($a['val'], $b['val']);
+	} 
+	else return ($a['val'] < $b['val']) ? -1 : 1;
+  }
+?>

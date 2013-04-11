@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
 encoding//cms_helper/templatetags/page_tags.py=utf-8
 encoding//gcsgroupwww/settings.py=utf-8
+encoding//orderedmodel/admin.py=utf-8
+encoding//rdoc/models.py=utf-8

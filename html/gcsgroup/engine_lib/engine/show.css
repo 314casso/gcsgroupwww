@@ -1,0 +1,37 @@
+
+
+input.sub{
+	FONT-SIZE: 11px;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	border : 1px solid #999999;
+	cursor : hand;
+}
+
+table.border{
+	background : #FFF3DD; border-color : #0A5600;  	border : 1px solid #999999;
+	textarea background : #FFF3DD; border-color : #0A5600; border-width : 1px; 
+	}
+table.wnd{
+	background : #0A246A; border-color : #0A5600;  	border : 1px solid #999999;
+	textarea background : #FFF3DD; border-color : #0A5600; border-width : 1px; 
+	}
+
+table.icon{
+	font-size:11px;
+	background : #FFF3DD; border-color : #0A5600;  	border-top : none;
+	border-left : none; border-bottom: 1px solid #999999; border-right: none;
+	textarea background : #FFF3DD; border-color : #0A5600; border-width : 1px; 
+	} 
+
+td.top{
+	COLOR: #0F655E; text-align : left; vertical-align : text-top;
+	}
+	
+
+
+a.menu:active   { font-size:11px; font-family: Arial Cyr, Arial, Verdana Cyr, Verdana, Sans-Serif; color:#12975E;   text-decoration: none;}
+a.menu:hover { font-size:11px; font-family: Arial Cyr, Arial, Verdana Cyr, Verdana, Sans-Serif; color:#12975E; border: #12975E solid 1px ; text-decoration: none;}
+a.menu:visited  { font-size:11px; font-family: Arial Cyr, Arial, Verdana Cyr, Verdana, Sans-Serif; color:#12975E;   text-decoration: none;}
+a.menu:link  { font-size:11px; font-family: Arial Cyr, Arial, Verdana Cyr, Verdana, Sans-Serif; text-decoration: none;  }
+
+

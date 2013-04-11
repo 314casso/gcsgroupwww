@@ -1,0 +1,576 @@
+<?php
+
+/*
+ *  $Id: body.php,v 1.15 2006/02/02 13:16:31 ereih Exp $
+ *
+ *  $Log: body.php,v $
+ *  Revision 1.15  2006/02/02 13:16:31  ereih
+ *  Исправлена система отправки пользователю результатов формы.
+ *  Из текста с названием убраны html теги
+ *
+ *  Revision 1.14  2005/07/04 12:06:55  aavakyan
+ *  Поправлена бага с кодировкой исходящего письма. Теперь кодировка прошивается в тело письма.
+ *
+ *  Revision 1.13  2005/02/05 11:09:07  dave
+ *  Запрещено использование подтвеждений для форм не-регистрации
+ *
+ *  Revision 1.12  2005/01/11 17:48:17  dave
+ *  Устранено прописывание введенных значений для невидимых полей
+ *
+ *  Revision 1.11  2005/01/10 18:09:32  dave
+ *  Исправления в обработке полей-списков
+ *
+ *  Revision 1.10  2004/12/29 16:40:41  dave
+ *  Убрана отладочная информация
+ *
+ *  Revision 1.9  2004/12/29 16:37:13  dave
+ *  Реализован предпросмотр формы
+ *
+ *  Revision 1.8  2004/12/26 11:50:06  dave
+ *  Переформатирование кода
+ *
+ */
+
+global $top_add, $bottom_add;
+global $engine_show_root;
+global $form_do, $regform_prefix, $regform_postfix, $regform_group;
+global $userlogin, $userpass, $username, $usermname, $userlname, $userphone, $userfirm, $useremail, $userinfo, $groupid;
+global $preview;
+
+$this->body = '';
+$js = '';
+
+$sql = 'SELECT *
+          FROM engine_FORM_fields
+         WHERE doc_id = '.$id.'
+      ORDER BY field_ord';
+
+if (!$result = @mysql_query($sql))
+{
+	die(mysql_error().':'.$sql);
+}
+
+$view_form = ($form_do == $id) ? false : true;
+$preview_form = (($preview == 1)&&($form_do == $id)) ? true : false;
+
+if ($preview == 2)
+{	$preview_form = false;
+	$view_form = true;
+}
+if ($this->spec['send_control'] && $_POST[preview] == 3) {
+	$preview_form = true;
+}
+if ($this->spec['send_control'] && $_POST[preview] == 2) {
+	$view_form = true;
+}
+
+	$templates = array(
+		'form_top' => '{form_desc}<form name="frm{form_id}" id="frm{form_id}" action="{form_action}" method="post"><table class="form_table">',
+		'form_body' => '{form_body}',
+		'form_preview' => '<tr><td><hr /></td></tr>{form_body}<tr><td><hr /></td></tr>',
+		'form_elem' => '<tr class="form_tr{row_num}"><td class="form_td1">{field_name}</td><td class="form_td2">{field_html}</td></tr>',
+		'form_bottom' => '<tr><td colspan="2" align="center">{form_buttons}</td></tr></table></form>',
+		'form_buttons' => '{button_submit} {button_edit}');
+
+
+
+while ($qst = mysql_fetch_array($result))
+{	
+
+	$field_name = empty($qst['field_bd_name']) ? 'fld'.$qst['id']: $qst['field_bd_name'];
+	$fields[$field_name] = array(  'bd' => $qst['field_bd_name'],
+	                               'name' => 'fld'.$qst['id'],
+           	                       'type' => $qst['field_type'],
+           	                       'regexp' => $qst['field_regexp'],
+           	                       'caption' => $qst['field_caption'],
+           	                       'message' => $qst['field_message'],
+           	                       'message2' => $qst['field_message2'],
+           	                       'required' => $qst['required'],
+           	                       'action' => $qst['field_action']);
+}
+
+if (($view_form == false)&&($preview_form == false))
+{	if ($this->spec['send_reg'])
+	{
+		$fields = $fields + array('login'  => array('name' => 'userlogin', 'required' => 1, 'type' => 'uniq', 'regexp' => 'login', 'caption' => 'Логин', 'message' => 'Логин должен содержать только латинские буквы и символы "@","_","-","."', 'message2' => 'Пользователь с таким логином уже существует', 'action' => 'trim'),
+	               	        'pass'   => array('name' => 'userpass', 'required' => 1, 'type' => '', 'regexp' => 'password', 'caption' => 'Пароль', 'message' => 'Пароль должен содержать минимум 6 символов', 'action' => 'md5'),
+	                        'name'   => array('name' => 'username', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Имя', 'message' => '', 'message2' => '', 'action' => 'trim'),
+	                        'mname'  => array('name' => 'usermname', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Отчество', 'message' => '', 'message2' => '', 'action' => 'trim'),
+	                        'lname'  => array('name' => 'userlname', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Фамилия', 'message' => '', 'message2' => '', 'action' => 'trim'),
+	                        'phone'  => array('name' => 'userphone', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Телефон', 'message' => '', 'message2' => '', 'action' => 'trim'),
+	                        'firm'   => array('name' => 'userfirm', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Фирма', 'message' => '', 'message2' => '', 'action' => 'trim'),
+	                        'email'  => array('name' => 'useremail', 'required' => 1, 'type' => 'uniq', 'regexp' => 'email', 'caption' => 'E-mail', 'message' => 'Некорректно заполнено поле "E-mail"', 'message2' => 'Пользователь с таким e-mail уже существует', 'action' => 'trim'),
+	                        'info'   => array('name' => 'userinfo', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Информация',  'message' => '', 'message2' => '', 'action' => 'trim'),
+	                        'ugroup' => array('name' => 'usergroup', 'required' => 0, 'type' => '', 'regexp' => '', 'caption' => 'Группа пользователя', 'message' => '', 'message2' => '', 'action' => 'trim'));
+		$_REQUEST['usergroup'] = $regform_group;
+
+		if ($this->spec[bd] != "_register") $this->spec['bd'] = 'engine_users';
+	}
+
+	$error = false;
+	$error_text = '';
+
+	foreach ($fields as $field_name => $field)
+	{
+		$this_error = false;
+
+		switch ($field['regexp'])
+		{
+			case 'login':    $field['regexp'] = '/^[A-z0-9@-_.]{3,}$/'; break;
+			case 'password': $field['regexp'] = '/^.{6,}$/'; break;
+			case 'email':    $field['regexp'] = '/^[A-z0-9][\w\.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/'; break;
+		}
+
+		if (!empty($field['regexp']))
+		{
+			if (preg_match($field['regexp'], $_REQUEST[$field['name']]) != 1)
+			{
+				$error = true;
+				$this_error = true;
+	               		$error_text .= (empty($field['message'])) ? 'Неверно заполнено поле <b>'.$field['caption'].'</b><br />' : $field['message'].'<br />';
+			}
+		}
+
+		if (($field['type'] == 'uniq')&&($this->spec['bd']))
+		{
+			$sql = 'SELECT *
+				FROM `'.$this->spec['bd'].'`
+	               	        WHERE `'.$field_name.'`= "'.mysql_real_escape_string($_REQUEST[$field['name']]).'"';
+
+			if ($sitelogged)
+			{				$sql .= ' AND id != '.$sitelogged['id'];
+			}
+
+	               	if (!$result_uniq = @mysql_query($sql))
+	               	{
+	               		die(mysql_error().':'.$sql);
+	               	}
+
+	               	if (@mysql_num_rows($result_uniq) > 0)
+	               	{
+	               		$error = true;
+	              		$this_error = true;
+	               		$error_text .=  (empty($field['message2'])) ? 'Значение поля <b>'.$field['caption'].'</b> уже есть в базе.<br />' : $field['message2'].'<br />';
+	               	}
+		}
+
+		if ($field['required'])
+		{			if (empty($_REQUEST[$field['name']]))
+			{				$error_text .=  'Вы не заполнили обязательное поле '.$field['caption'].'<br />';
+				$error = true;
+	              		$this_error = true;
+			}
+		}
+
+		if ($this_error == false)
+		{
+			if ($field['input'] == 'checkbox')
+			{
+				$_REQUEST[$field['name']] = isset($_REQUEST[$field['name']]) ? 1 : 0;
+
+			}
+
+	               	switch($field['action'])
+	               	{
+	               		case 'trim': $field_value = trim($_REQUEST[$field['name']]);
+	               		             break;
+	               		case 'md5' : $field_value = md5(trim($_REQUEST[$field['name']]));
+	               		             break;
+	               		default    : $field_value = $_REQUEST[$field['name']];
+	               		             break;
+	               	}
+
+	               	$fields[$field_name]['value'] = $field_value;
+	               	$fields[$field_name]['value2'] = $_REQUEST[$field['name']];
+		}
+	}
+
+        if ($this->spec['send_bd'])
+        {
+
+                if ($error == false){ 
+
+               	$action = false; 
+               	if (($this->spec['send_reg'])&&(is_array($sitelogged))){  
+              		$sql = 'UPDATE `'.$this->spec['bd'].'` SET ';
+                		foreach ($fields as $field_name => $field)
+	                	{
+	                		if ($field['bd'])
+	                		{	                			$sql .= ' `'.$field['bd'].'`= "'.mysql_real_escape_string($field['value']).'",';
+	                			$action = true;	                		}
+	                	}
+
+	                	$sql = substr($sql, 0, -1);
+	                	$sql .= ' WHERE id='.$sitelogged['id'];
+
+	                	if ($action)
+	                        {
+	                                if (!@mysql_query($sql))
+	                                {
+	                                        $this->spec[text] = 'Извините, но сейчас ваши данные не могут быть обработаны, попробуйте позже.'.$sql;
+	                                        $err = 1;
+						$view_form = false;
+						$preview_form = false;
+	                                }
+
+	                                $sql = 'SELECT *
+	                                          FROM `'.$this->spec['bd'].'`
+	                                          WHERE id='.$sitelogged['id'];
+
+	                                if (!$result_user = mysql_query($sql))
+	                                {	                                	die($sql);
+	                                }
+
+	                                $sitelogged = mysql_fetch_array($result_user, MYSQL_ASSOC);
+
+	                                if (($this->spec['form_success'])&&($err != 1))
+	                                {	                                	include $engine_show_root.'/'.$this->spec['form_success'];
+	                                }
+	                        }                	}
+                	else
+                	{
+	                	$flds = '(';
+				$vals = '(';
+
+	                	foreach ($fields as $field_name => $field)
+	                	{	                		if ($field['bd'])
+	                		{	                			$flds .= '`'.$field['bd'].'`,';
+	                			$vals .= '"'.mysql_real_escape_string($field['value']).'",';
+	                			$action = true;
+	                		}
+	                	}
+
+
+
+				if ($this->spec['bd'] == "_register" || $this->spec['send_reg']){
+	                		$flds = substr($flds, 0, -1).',login,pass, email)';
+	                        	$vals = substr($vals, 0, -1).",'".$_POST[userlogin]."','".$_POST[userpass]."','".$_POST[useremail]."')";
+				}
+				else{
+	                		$vals = substr($vals, 0, -1).')';
+	                        	$flds = substr($flds, 0, -1).')';
+				}
+
+	                        $sql = 'INSERT INTO `'.$this->spec['bd'].'` ';
+	                        $sql .= $flds.' VALUES '.$vals;
+					//echo $sql;
+	                        if ($action)
+	                        {
+	                                if (!@mysql_query($sql))
+	                                {
+	                                        $this->spec[text] = 'Извините, но сейчас ваши данные не могут быть обработаны, попробуйте позже.'.$sql;
+	                                        $err = 1;
+						$view_form = false;
+						$preview_form = false;
+	                                }
+	                                elseif ($this->spec['form_success'])
+	                                {	                                	include $engine_show_root.'/'.$this->spec['form_success'];
+	                                }
+	                        }
+	                 }
+                }
+                else
+                {
+                	$this->spec['desc'] = $error_text;
+                	$preview_form = false;
+			$view_form = true;
+                }
+        }
+
+        if ($this->spec['send_email'])
+        {
+
+        	if ($error == false)
+                {
+	        	$message = '';
+	        	foreach ($fields as $field_name => $field)
+			{
+				$message .= strip_tags($field['caption']).': '.htmlspecialchars($field['value2'])."\n";
+				$message .= "-- -- -- -- -- -- -- -- -- -- -- -- -- --\n";
+			}
+
+			$headers =
+			"From: no-reply@{$_SERVER['SERVER_NAME']}\r\n" .
+			"X-Mailer: PHP/" . phpversion()."\r\n";
+
+	                if ($this->spec['coding'] == 'w')
+	                {
+	                	$sbj = $this->name;
+				$headers .= "Content-Type: text/plain; charset=windows-1251\r\n";
+	                }
+	                else
+	                {
+	                        $msg = convert_cyr_string($msg, w, k);
+	                        $sbj = convert_cyr_string($this->name, w, k);
+
+	                        $headers .= "Content-Type: text/plain; charset=koi8-r\r\n";
+	                }
+
+	                if (!@mail($this->spec['email'], $sbj, $message, $headers))
+	                {
+	                	$this->spec['text'] = 'При отправке письма произошла ошибка';
+	                }
+		}
+		else
+		{
+			$this->spec['desc'] = $error_text;
+			$preview_form = false;
+			$view_form = true;
+		}
+        }
+
+        if ($view_form == false)
+        {        	$this->body = $this->spec['text'];
+        }
+}
+
+@mysql_data_seek($result, 0);
+if (($sitelogged)&&($this->spec['send_reg']))
+{	while ($qst = mysql_fetch_array($result))
+	{		global ${'fld'.$qst['id']};		${'fld'.$qst['id']} = $sitelogged[$qst['field_bd_name']];
+
+	}
+
+	if ($err != 1)
+	{		$view_form = true;
+	}
+}
+
+@mysql_data_seek($result, 0);
+	//echo $_POST[preview];
+
+if (($view_form == true)||($preview_form == true))
+{
+
+	$vars = array('form_body' => '',
+	              'form_id' => $id);
+
+        if (empty($this->spec['action']))
+        {                $vars['form_action'] =  geturl($id);
+        }
+        else
+        {                $vars['form_action'] = $this->spec['action'];
+        }
+
+	if ($preview_form && $this->spec['text_control']){
+		$vars['form_desc'] = $this->spec['text_control'];
+	}
+	elseif ($preview_form){
+		$vars['form_desc'] = 'Проверьте Ваши данные';
+	}
+	else
+	{		$vars['form_desc'] = $this->spec['desc'];
+	}
+
+        //Проверка на форму регистрации
+        if ($this->spec['send_reg'])
+        {                $fdescr = array('Логин', 'Пароль', 'Имя', 'Отчество', 'Имя', 'Телефон', 'Огрганизация', 'E-mail');
+                $fnames = array('userlogin', 'userpass', 'username', 'usermname', 'userlname', 'userphone', 'userfirm', 'useremail');
+                $fvals  = array($userlogin, $userpass, $username, $usermname, $userlname, $userphone, $userfirm, $useremail);
+
+        	for ($i = 0; $i < count($fnames); $i++)
+        	{ 
+
+       		if (!empty($fvals[$i]))
+        		{  
+
+                 		if ($preview == 1)
+                    		{    
+
+                			if ($fdescr[$i] != '')
+                    			{   
+                 				$elem = array();
+                    				$elem['form_id'] = $id;
+                    				$elem['row_num'] = ((++$trc % 2) + 1);
+                    				$elem['field_name'] = $fdescr[$i];
+                    				$elem['field_html'] = $fvals[$i].'<input type="hidden" name="'.$fnames[$i].'" value="'.$fvals[$i].'" />';                    				$vars['form_body'] .= AssignVars($elem, $templates['form_elem']);
+					}
+					else
+					{						$vars['form_body'] .= '<input type="hidden" name="'.$fnames[$i].'" value="'.$fvals[$i].'" />';
+					}
+                    		}
+                    		else
+                    		{                    			if ($fdescr[$i] != '')
+                    			{
+                            			$js .= 'document.forms.frm'.$id.'.'.$fnames[$i].'.value = "'.$fvals[$i]."\";\n";
+ 					}
+                    		}
+			}
+        	}
+		//echo $regform_prefix; 
+        	if ($preview_form == false)
+        	{			$vars['form_body'] .= $regform_prefix;
+        	}
+        }
+
+        while ($qst = mysql_fetch_array($result))
+        {
+
+        	global ${'fld'.$qst['id']};
+
+		$qst[field_text] = str_replace("<input","<INPUT",$qst[field_text]);
+		$qst[field_text] = str_replace("<select","<SELECT",$qst[field_text]);
+		$qst[field_text] = str_replace("<textarea","<TEXTAREA",$qst[field_text]);
+		$qst[field_text] = str_replace(array("\n","\t", "\r"),"",$qst[field_text]);
+		$qst[field_text] = str_replace("  "," ",$qst[field_text]);
+		if (!${'fld'.$qst[id]} && strstr($qst[field_text],"value")) {
+			${'fld'.$qst[id]} = str_replace(array("<INPUT value=","<SELECT value=","<TEXTAREA value=",">","\""),"",$qst[field_text]);
+			${'fld'.$qst[id]} = str_replace(array("\n","\t", "\r"),"",${'fld'.$qst[id]});
+			$qst[field_text] = str_replace("value=\"".${'fld'.$qst[id]}."\"","",$qst[field_text]);
+			$qst[field_text] = str_replace("value=".${'fld'.$qst[id]}."","",$qst[field_text]);
+		}
+
+                if ($_GET[d]){
+                        $qst[field_text] = str_replace("<INPUT", "<INPUT disabled class=form_input id=fld$qst[id] name=\"$qst[field_name]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+
+
+                        $qst[field_text] = str_replace("<SELECT", "<SELECT disabled class=form_input  id=fld$qst[id] name=\"$qst[field_name]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                        $qst[field_text] = str_replace("<TEXTAREA", "<TEXTAREA disabled class=form_input  id=fld$qst[id] name=\"$qst[field_name]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                }
+                elseif ($this->spec['send_URL']){
+                        $qst[field_text] = str_replace("<INPUT", "<INPUT class=form_input id=fld$qst[id] name=\"$qst[field_name]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+
+
+                        $qst[field_text] = str_replace("<SELECT", "<SELECT class=form_input  id=fld$qst[id] name=\"$qst[field_name]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                        $qst[field_text] = str_replace("<TEXTAREA", "<TEXTAREA class=form_input  id=fld$qst[id] name=\"$qst[field_name]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                }
+		  elseif($this->spec['form_format'] && $view_form == true){
+                    //   $qst[field_text] = str_replace("<INPUT", "id=fld$qst[id] name=\"fld$qst[id]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                    //    $qst[field_text] = str_replace("<SELECT", "id=fld$qst[id] name=\"fld$qst[id]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                    //    $qst[field_text] = str_replace("<TEXTAREA", "id=fld$qst[id] name=\"fld$qst[id]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                    //    $qst[field_text] = str_replace(">", "" , $qst[field_text]);
+		  }
+                else
+                { 
+                       $qst[field_text] = str_replace("<INPUT", "<INPUT class=form_input  id=fld$qst[id] name=\"fld$qst[id]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                        $qst[field_text] = str_replace("<SELECT", "<SELECT class=form_input  id=fld$qst[id] name=\"fld$qst[id]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+                        $qst[field_text] = str_replace("<TEXTAREA", "<TEXTAREA class=form_input  id=fld$qst[id] name=\"fld$qst[id]\" value=\"".${'fld'.$qst[id]}."\"" , $qst[field_text]);
+
+                }
+
+ 		 //указываем, что выбрали checkbox
+		 if (strstr($qst[field_text],"checkbox") && strstr($qst[field_text],"value=\"\"")){
+               	$qst[field_text] = str_replace("value=\"\"", "value=\"1\"" , $qst[field_text]);
+		 }
+
+
+		$qst['field_text'] = str_replace(' value=\'""\'', ' value=\'\'', $qst[field_text]);
+		$qst['field_text'] = preg_replace('/<OPTION>([^<]*)<\/OPTION>/', '<OPTION VALUE="\1">\1</OPTION>', $qst[field_text]);
+		$qst['field_text'] = preg_replace('/<OPTION value="">([^<]*)<\/OPTION>/', '<OPTION VALUE="\1">\1</OPTION>', $qst[field_text]);
+		$qst['field_text'] = preg_replace('/<OPTION selected>([^<]*)<\/OPTION>/', '<OPTION VALUE="\1" SELECTED>\1</OPTION>', $qst[field_text]);
+		$qst['field_text'] = preg_replace('/<OPTION value="" selected>([^<]*)<\/OPTION>/', '<OPTION VALUE="\1" SELECTED>\1</OPTION>', $qst[field_text]);
+
+		if (${'fld'.$qst['id']} != '')
+		{			$qst[field_text] = str_replace(' selected', '', $qst[field_text]);
+			$qst[field_text] = str_replace('<OPTION value="'.${"fld$qst[id]"}.'"', '<OPTION VALUE="'.${"fld$qst[id]"}.'" SELECTED', $qst[field_text]);
+			$qst[field_text] = str_replace('<OPTION value='.${"fld$qst[id]"}.'', '<OPTION VALUE="'.${"fld$qst[id]"}.'" SELECTED', $qst[field_text]);
+		}
+
+        	if ($preview_form)
+        	{  
+      		global ${'fld'.$qst['id']};
+
+			if ((strpos($qst['field_text'], 'checkbox') !== false)&&(isset($_REQUEST['fld'.$qst['id']])))
+			{				$vars['form_body'] .= '<input type="hidden" name="fld'.$qst['id'].'" value="'.htmlspecialchars(trim($_REQUEST['fld'.$qst['id']])).'">';			}
+			else
+			{				$elem = array();				$elem['form_id'] = $id;
+				$elem['row_num'] = ((++$trc % 2) + 1);
+				$elem['field_name'] = $qst['field_caption'];
+				$elem['field_html'] = htmlspecialchars(trim($_REQUEST['fld'.$qst['id']])).'<input type="hidden" name="fld'.$qst['id'].'" value="'.htmlspecialchars(trim($_REQUEST['fld'.$qst['id']])).'" />';
+				$vars['form_body'] .= AssignVars($elem, $templates['form_elem']);			}
+        	}
+        	else
+        	{        		$elem = array();        		$elem['form_id'] = $id;
+			$elem['row_num'] = ((++$trc % 2) + 1);
+			$elem['field_name'] = $qst['field_caption'];
+			$elem['field_html'] = $qst['field_text'];
+
+			if (!$this->spec['form_format'])
+				$vars['form_body'] .= AssignVars($elem, $templates['form_elem']);
+			else {
+				//echo $view_form;
+				if ($view_form == true){
+				//	echo "==============".$qst['field_text']."///////////";
+					$this->spec['form_format'] = str_replace("[fld".$qst['id']."]",$qst['field_text'],$this->spec['form_format']);;
+				}
+				else{
+					$vars['form_body'] .= AssignVars($elem, $templates['form_elem']);
+				}
+
+			}
+
+		}
+	}
+
+	if ($this->spec['send_reg'])
+	{		$vars['form_body'] .= $regform_postfix;
+        }
+
+	if ($this->spec['button'])
+	{		if (strpos($this->spec['button'], '<') === 0)
+		{			$vars['button_submit'] = $this->spec['button'];		}
+		else
+		{			$vars['button_submit'] = '<input class="form_submit" value="'.htmlspecialchars($this->spec["button"]).'" type="submit" />';		}
+	}
+	else
+	{		$vars['button_submit'] = '<input class="form_submit" value="Отправить" type="submit" />';	}
+
+	if ($preview_form == true)
+	{		if ($this->spec['button_edit'])
+		{			if (strpos($this->spec['button_edit'], '<') === 0)
+			{
+				$vars['button_edit'] .= $this->spec['button_edit'];
+			}
+			else
+			{
+				$vars['button_edit'] .= '<input class="form_submit" value="'.htmlspecialchars($this->spec["button_edit"]).'" type="submit" onclick="document.forms.frm'.$id.'.preview.value = 2;" />';
+			}
+		}
+		else
+		{			$vars['button_edit'] .= '<input class="form_submit" value="Изменить данные" type="submit" onclick="document.forms.frm'.$id.'.preview.value = 2;" />';
+		}
+	}
+
+	if (empty($vars['button_edit']))
+	{		$vars['form_buttons'] = $vars['button_submit'];
+	}
+	else
+	{		$vars['form_buttons'] = AssignVars($vars, $templates['form_buttons']);
+	}
+
+       if ($this->spec['send_reg']){
+                $vars['form_body'] .= '<input type="hidden" name="preview" value="'.($preview_form ? 0 : 1).'">';
+	}
+       if ($this->spec['send_control']){
+                $vars['form_body'] .= '<input type="hidden" name="preview" value="'.($preview_form ? 0 : 3).'">';
+	}
+
+        $vars['form_body'] .= '<input type="hidden" name="form_do" value="'.$id.'">';
+
+        $vars['body']  = AssignVars($vars, $templates['form_top']);
+        $vars['body'] .= AssignVars($vars, ($preview_form ? $templates['form_preview'] : $templates['form_body']));
+        $vars['body'] .= AssignVars($vars, $templates['form_bottom']);
+
+	 if (!$this->spec['form_format'])
+        	$this->body = $vars['body'];
+	 else {
+		if ($view_form == true){
+			$this->spec['form_format'] = str_replace("[form_id]",$vars['form_id'],str_replace("[form_desc]",'<input type="hidden" name="form_do" value="'.$id.'">'.$vars['form_desc'],$this->spec['form_format']));
+        		$this->body = str_replace("[form_action]",$vars['form_action'],$this->spec['form_format']);
+		}
+		else{
+			$this->body = $vars['body'];
+		}
+	}
+}
+
+if ($js != '')
+{	$this->body .= '
+<SCRIPT language=JavaScript>
+'.$js.'
+</SCRIPT>';
+}
+
+$preview = 0;
+
+?>

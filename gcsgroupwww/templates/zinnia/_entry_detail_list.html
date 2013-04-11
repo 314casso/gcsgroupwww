@@ -1,0 +1,11 @@
+{% extends "zinnia/_entry_detail.html" %}
+{% load url from future %} 
+{% load i18n %}
+
+{% block entry-title %}
+    <h3>{{ object.title }}</h3>
+{% endblock %}
+
+{% block entry-info %}
+<span class="label label-info">{{ object.creation_date|date:"SHORT_DATE_FORMAT" }}</span>
+{% endblock entry-info %}

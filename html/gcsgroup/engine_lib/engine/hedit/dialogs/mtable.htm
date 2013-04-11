@@ -1,0 +1,192 @@
+<HTML>
+<TITLE>Изменение свойств таблицы</TITLE>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<STYLE>
+BODY, TD, INPUT {font-size: 9pt;font-family:Arial} 
+.butClass { border:1px solid #D6D3CE;width:20px;height:20px }
+</STYLE>
+</HEAD>
+<body bgcolor="#D6D3CE">
+<script language=javascript>
+var colorSet = [
+'#FF0000','#FFFF00','#00FF00','#00FFFF','#0000FF','#FF00FF','#FFFFFF','#F5F5F5','#DCDCDC','#FFFAFA',
+'#D3D3D3','#C0C0C0','#A9A9A9','#808080','#696969','#000000','#2F4F4F','#708090','#778899','#4682B4',
+'#4169E1','#6495ED','#B0C4DE','#7B68EE','#6A5ACD','#483D8B','#191970','#000080','#00008B','#0000CD',
+'#1E90FF','#00BFFF','#87CEFA','#87CEEB','#ADD8E6','#B0E0E6','#F0FFFF','#E0FFFF','#AFEEEE','#00CED1',
+'#5F9EA0','#48D1CC','#00FFFF','#40E0D0','#20B2AA','#008B8B','#008080','#7FFFD4','#66CDAA','#8FBC8F',
+'#3CB371','#2E8B57','#006400','#008000','#228B22','#32CD32','#00FF00','#7FFF00','#7CFC00','#ADFF2F',
+'#98FB98','#90EE90','#00FF7F','#00FA9A','#556B2F','#6B8E23','#808000','#BDB76B','#B8860B','#DAA520',
+'#FFD700','#F0E68C','#EEE8AA','#FFEBCD','#FFE4B5','#F5DEB3','#FFDEAD','#DEB887','#D2B48C','#BC8F8F',
+'#A0522D','#8B4513','#D2691E','#CD853F','#F4A460','#8B0000','#800000','#A52A2A','#B22222','#CD5C5C',
+'#F08080','#FA8072','#E9967A','#FFA07A','#FF7F50','#FF6347','#FF8C00','#FFA500','#FF4500','#DC143C',
+'#FF0000','#FF1493','#FF00FF','#FF69B4','#FFB6C1','#FFC0CB','#DB7093','#C71585','#800080','#8B008B',
+'#9370DB','#8A2BE2','#4B0082','#9400D3','#9932CC','#BA55D3','#DA70D6','#EE82EE','#DDA0DD','#D8BFD8',
+'#E6E6FA','#F8F8FF','#F0F8FF','#F5FFFA','#F0FFF0','#FAFAD2','#FFFACD','#FFF8DC','#FFFFE0','#FFFFF0',
+'#FFFAF0','#FAF0E6','#FDF5E6','#FAEBD7','#FFE4C4','#FFDAB9','#FFEFD5','#FFF5EE','#FFF0F5','#FFE4E1'];
+
+function selOn(ctrl)
+{ ctrl.style.borderColor = '#546697';
+  ctrl.style.backgroundColor = '#B5BED6';    
+  ctrl.style.cursor = 'hand'; }
+
+function selOff(ctrl)
+{ ctrl.style.borderColor = '#D6D3CE';
+  ctrl.style.backgroundColor = '#D6D3CE'; }
+
+function selDown(ctrl)
+{ ctrl.style.backgroundColor = '#8492B5';  }
+
+function selUp(ctrl)
+{ ctrl.style.backgroundColor = '#B5BED6';  }
+
+function insColor(oColor) {
+ eval('tableForm.'+colorType).value=oColor;
+}
+function hideColor(){
+ colorMenu.style.visibility='hidden';
+}
+var colorType='table_backgroundcolor';
+
+var myTable = window.opener;
+
+window.onload = setValues;
+
+var tableBgColor = myTable.selectedTABLE.bgColor;
+var tableBorderColor = myTable.selectedTABLE.borderColor;
+var tableSpacing = myTable.selectedTABLE.cellSpacing;
+var tablePadding = myTable.selectedTABLE.cellPadding;
+var tableBorder = myTable.selectedTABLE.border;
+var tableWidth = myTable.selectedTABLE.width;
+var tableHeigth = myTable.selectedTABLE.height;
+
+function setValues() {
+
+	if (tableSpacing == "") tableSpacing = 2;
+	if (tablePadding == "") tablePadding = 1;
+	if (tableBorder == "") tableBorder = 0;
+
+	tableForm.table_backgroundcolor.value = tableBgColor;
+	tableForm.table_bordercolor.value = tableBorderColor;
+	tableForm.table_padding.value = tablePadding;
+	tableForm.table_spacing.value = tableSpacing;
+	tableForm.table_border.value = tableBorder;
+	tableForm.table_width.value = tableWidth;
+	tableForm.table_height.value = tableHeigth;
+	this.focus();
+}
+
+function doModify() {
+
+	var error = 0;
+	if (isNaN(tableForm.table_padding.value) || tableForm.table_padding.value < 0 || tableForm.table_padding.value == "") {
+		alert("Cell Padding must contain a valid, positive number")
+		error = 1
+		tableForm.table_padding.select()
+		tableForm.table_padding.focus()
+	} else if (isNaN(tableForm.table_spacing.value) || tableForm.table_spacing.value < 0 || tableForm.table_spacing.value == "") {
+		alert("Cell Spacing must contain a valid, positive number")
+		error = 1
+		tableForm.table_spacing.select()
+		tableForm.table_spacing.focus()
+	} else if (isNaN(tableForm.table_border.value) || tableForm.table_border.value < 0 || tableForm.table_border.value == "") {
+		alert("Border must contain a valid, positive number")
+		error = 1
+		tableForm.table_border.select()
+		tableForm.table_border.focus()
+	}
+
+	if (error != 1) {
+        	myTable.selectedTABLE.cellPadding = tableForm.table_padding.value
+        	myTable.selectedTABLE.cellSpacing = tableForm.table_spacing.value
+        	myTable.selectedTABLE.border = tableForm.table_border.value
+		myTable.selectedTABLE.width = tableForm.table_width.value
+		myTable.selectedTABLE.height = tableForm.table_height.value
+        	if (tableForm.table_backgroundcolor.value != "") {
+		 myTable.selectedTABLE.bgColor = tableForm.table_backgroundcolor.value
+        	} else {
+		 myTable.selectedTABLE.removeAttribute('bgColor',0)
+        	}
+		if (tableForm.table_bordercolor.value != "") {
+		 myTable.selectedTABLE.bordercolor = tableForm.table_bordercolor.value
+        	} else {
+		 myTable.selectedTABLE.removeAttribute('bordercolor',0)
+        	}
+
+        	window.close()
+	}
+}
+
+</script>
+
+<form name=tableForm>
+
+<table border="0" cellspacing="0" cellpadding="2">
+<tr>
+<td valign=top>
+<table style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="130">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=3>Цвета</td>
+</tr>
+<tr>
+<td>Фон:</td>
+<td><img alt="Выберите цвет" class="butClass" src="cl.gif" onMouseOver="selOn(this)" onMouseOut="selOff(this)" onMouseDown="selDown(this)" onMouseUp="selUp(this)" onClick="colorType='table_backgroundcolor';colorMenu.style.marginTop='0px';colorMenu.style.visibility='visible'">
+<div onClick="hideColor()" id="colorMenu" onmouseover="this.style.visibility='visible'" onmouseout="this.style.visibility='hidden'" STYLE="background-color:#D6D3CE;margin-left:-22px;margin-top:0px;border:1px solid black;position:absolute;visibility:hidden">
+<nobr>
+<script>
+for (s=0;s<colorSet.length;s++){
+ document.write('<img src="no.gif" width="9" style="background-color:'+colorSet[s]+';" onClick="insColor(\''+colorSet[s]+'\')">');
+ if ((s+1)/20==parseInt((s+1)/20)) document.write('<br>');
+}
+</script>
+</div>
+</td>
+<td><input type="text" name="table_backgroundcolor" size="7"></td>
+</tr>
+<tr>
+<td>Рамка:</td>
+<td><img alt="Выберите цвет" class="butClass" src="cl.gif" onMouseOver="selOn(this)" onMouseOut="selOff(this)" onMouseDown="selDown(this)" onMouseUp="selUp(this)" onClick="colorType='table_bordercolor';colorMenu.style.marginTop='30px';colorMenu.style.visibility='visible'"></td>
+<td><input type="text" name="table_bordercolor" size="7"></td>
+</tr>
+</table>
+<input type="button" name="modifyTable" value="Готово" onClick="javascript:doModify();">
+<input type="button" name="Submit" value="Отмена" onClick="javascript:window.close()">
+
+</td>
+<td>
+<table height="100%" style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="120">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=2>Отступы ячеек</td>
+</tr>
+<tr>
+<td>Внутри:</td>
+<td><input type="text" name="table_padding" size="2"></td>
+</tr>
+<td>Снаружи:</td>
+<td><input type="text" name="table_spacing" size="2"></td>
+</tr>
+</table>
+</td>
+<td>
+<table height="100%" style="border:1px solid white" border="0" cellspacing="0" cellpadding="2" width="130">
+<tr>
+<td style="background-color:#fdfdfd;border:1px solid white" colspan=2>Размеры</td>
+</tr>
+<tr>
+<td>Ширина:</td>
+<td><input type="text" name="table_width" size="4"></td>
+</tr>
+<tr>
+<td>Высота:</td>
+<td><input type="text" name="table_height" size="4"></td>
+</tr>
+<tr>
+<td>Рамка:</td>
+<td><input type="text" name="table_border" size="4"></td>
+</tr>
+</table>
+</td>
+</tr></table>
+</form>
+</body>
+</html>

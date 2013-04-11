@@ -1,0 +1,77 @@
+<div style="float:left;width:241;background-color:#CCCBCB;text-align:left;padding:0 0 0 0;margin-left:10px;"><img src="/common/img/ND/new-model/new-model1.gif" align=center alt=""><br><div style="width:241;height:<TMPL_VAR NAME="HEIGH">px;">
+  <div style="width:220px;padding:10px 5px 0px 0px;text-align:left;font-size:16px;font-weight:bold;margin-left:15px;color:black;"><img src="/common/img/ND/laptop/new/search-black.gif"  alt="">&nbsp;&nbsp;Новинки</div>
+<TMPL_IF NAME="_new_model_loop">
+<TMPL_LOOP NAME="_new_model_loop">
+	<!-- модель -->
+  	<div style="width:240;float:left;margin-top:10px;border:0px solid red;<TMPL_IF NAME="__LAST__">margin-bottom:6px;</TMPL_IF>">
+	<!-- левая половина -->
+		<div style="width:90;float:left;text-align:left;margin-left:5px;">
+		<!-- фото -->
+    		  <div style="background-image:url(/common/img/ND/new-model/new-model-bg.gif);width:86px;height:86px;background-repeat:no-repeat;"><a href="?id166=<TMPL_VAR NAME="CONTENT_ID">"><img src="http://pics.zoom.cnews.ru/zoom/<TMPL_IF NAME="IMAGESTO"><TMPL_VAR NAME="IMAGESTO"><TMPL_ELSE>common/img/pic_model/no_foto.jpg</TMPL_IF>" width="80" height="80" alt="<TMPL_VAR NAME="TITLE">" border="0" style="margin-left:3px;margin-top:3px;"></a>
+   		  </div>
+		<!-- /фото -->
+		</div>
+	<!-- /левая половина -->
+	<!-- правая половина -->
+		<div style="width:125;float:right;text-align:left;font-size:11px;margin-right:5px;">
+		<!-- название модели -->
+		<a href="?id166=<TMPL_VAR NAME="CONTENT_ID">" style="font-size:12px;font-weight:bold;"><TMPL_VAR NAME="TITLE"></a><br>
+		<!-- /название модели -->
+		<TMPL_IF NAME="REITING_VALUE">
+		<!-- рейтинг -->
+		  <div style="margin-left:3px;color:black;margin-top:5px;">
+			<TMPL_IF NAME="REITING_VALUE" OP=">=" VALUE="9">
+			<img src="/common/img/ND/rating/rating-9.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="8">
+			<img src="/common/img/ND/rating/rating-8.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="7">
+			<img src="/common/img/ND/rating/rating-7.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="6">
+			<img src="/common/img/ND/rating/rating-6.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="5">
+			<img src="/common/img/ND/rating/rating-5.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="4">
+			<img src="/common/img/ND/rating/rating-4.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="3">
+			<img src="/common/img/ND/rating/rating-3.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSEIF NAME="REITING_VALUE" OP=">=" VALUE="2">
+			<img src="/common/img/ND/rating/rating-2.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			<TMPL_ELSE>
+			<img src="/common/img/ND/rating/rating-1.gif"  style="border:1px solid #494949;" width=110 height=8 alt="<TMPL_VAR NAME="REITING_VALUE"> из 10">
+			</TMPL_IF>
+<br>
+			<b><a href="<tmpl_var name="REITING_URL">" class="rating" style="font-size:16px;color: #FF6C00;"<TMPL_IF NAME="REITING_LOOP_TITLE"> onmouseover="show_pic('reiting_<tmpl_var name="__ROWNUM__">')" onmouseout="hide_pic('reiting_<tmpl_var name="__ROWNUM__">')"</TMPL_IF>><TMPL_VAR NAME="REITING_VALUE"></a></b><small> из 10</small>
+		  </div>
+<TMPL_IF NAME="REITING_LOOP_TITLE"> <div id="reiting_<tmpl_var name="__ROWNUM__">" class="reiting-table-new" style="text-align:left;padding:5px;position:absolute;visibility: hidden;background-color:#FFFFFF;border:1px solid #CCCCCC;color:#000;font-size:11px;"><TMPL_IF NAME="REITING_LOOP_TITLE"><TMPL_LOOP NAME="REITING_LOOP_TITLE"><nobr><tmpl_var name="TITLE">: <b><tmpl_var name="WEIGHT"></b></nobr><TMPL_IF NAME="__LAST__"><TMPL_ELSE><br></TMPL_IF></TMPL_LOOP></TMPL_IF></div></TMPL_IF>
+		<!-- /рейтинг -->
+		</TMPL_IF>
+		<TMPL_IF NAME="PRICE">
+		<!--  ср. цена -->
+		<div style="margin-left:3px;color:black;<TMPL_IF NAME="REITING_VALUE">margin-top:2px;<TMPL_ELSE>margin-top:5px;</TMPL_IF>">
+			<TMPL_IF NAME="LOW_PRICE">от <b><a href="?id166=<TMPL_VAR NAME="CONTENT_ID">&ext166=0&ext_pr166=1&price#price" class="rating" style="color: #FF6C00;"><TMPL_VAR NAME="LOW_PRICE"> р.</a></b></TMPL_IF><TMPL_IF NAME="HIGH_PRICE"><br><TMPL_IF NAME="ONE_PRICE" OP="!=" VALUE="1">до <a href="?id166=<TMPL_VAR NAME="CONTENT_ID">&ext166=0&ext_pr166=1&price#price" class="rating" style="color: #FF6C00;"><b><TMPL_VAR NAME="HIGH_PRICE"> р.</b></a></TMPL_IF></TMPL_IF>
+			</div>
+		<!--  /ср. цена -->
+		</TMPL_IF>
+
+		 <TMPL_IF NAME="ARTICLE_LOOP">
+		<!-- ссылки -->
+		<ul class="popul-black">
+<TMPL_LOOP NAME="ARTICLE_LOOP"><TMPL_IF NAME="__FIRST__">
+<li><a href="?id166=<TMPL_VAR NAME="PRODUCT_ID">&art_id166=<TMPL_VAR NAME="CONTENT_ID">">Читать тест</a></li></TMPL_IF></TMPL_LOOP>
+		</ul>
+		</TMPL_IF>
+		<!-- /ссылки -->
+ 		</div>
+	<!-- /правая половина -->
+	</div>
+	<TMPL_IF NAME="__LAST__">
+	<TMPL_ELSE>
+	<div style="width:240;float:left;margin-top:5px;">
+	<div style="width:100;float:left;"><spacer type="block" width="90" height="1"></spacer></div>
+	<div style="width:130;float:left;border-top:1px solid #ffffff;"><spacer type="block" width="130" height="1"></spacer></div>
+	</div>
+	</TMPL_IF>
+	<!-- /модель -->
+</TMPL_LOOP>
+</TMPL_IF>
+<br></div><img src="/common/img/ND/new-model/new-model2.gif" align=center alt=""></div>
