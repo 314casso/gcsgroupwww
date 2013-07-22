@@ -1,20 +1,18 @@
 {% load i18n %}
 
 {% if entries %}
-    <ul class="doclist">
-    {% for doc in entries %}
-        <li><span>{{ doc.issue_date|date:"d.m.Y"}}</span><a href="{{ MEDIA_URL }}{{ doc.attachment }}">{{ doc.title }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>{% trans "No docs are available" %}</p>
+<ul class="unstyled clear-list">
+	{% for object in entries %}
+	<li>
+		<span class="label label-important">{{ object.creation_date|date:"SHORT_DATE_FORMAT" }}</span>
+		<a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a>		
+	</li>
+	{% endfor %}
+</ul>
 {% endif %}
 
 {% if is_paginated %}
 {% load zinnia_tags %}
 {% zinnia_pagination page_obj %}
 {% endif %}
-
-
-{% load i18n %}
 

@@ -52,3 +52,11 @@ body {
 #news {
 	margin-top: -3px;
 }
+
+.clear-list li{
+	padding-top: 10px;
+}
+
+.clear-list li:first-child{
+	padding-top: 0;
+}
