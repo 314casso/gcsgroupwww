@@ -18,9 +18,9 @@ class Contact(OrderedModel, BaseList):
     @property
     def fio(self):        
         if get_language() == 'ru':
-            return '%s %s %s' % (self.last_name, self.first_name, self.middle_name)
+            return u'%s %s %s' % (self.last_name, self.first_name, self.middle_name)
         else:
-            return '%s %s. %s' % (self.first_name, str(self.middle_name)[:1] , self.last_name)
+            return u'%s %s. %s' % (self.first_name, str(self.middle_name)[:1] , self.last_name)
     
 class Partner(OrderedModel, BaseList):
     title = models.CharField(_('Title'), max_length=150)
