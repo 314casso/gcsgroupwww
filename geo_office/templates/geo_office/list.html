@@ -1,0 +1,12 @@
+<ul class="adresses">
+{% for office in offices %}
+	<li style="background: url({{ office.town.country.image.url }}) no-repeat 0px 1px; list-style: none">
+		<strong title="{{ office.town.country.name }}">{{ office.town.name }}</strong>,
+		<br>
+		{% for contact in office.prime_contacts  %}
+			{{ contact.contact_type }}: {{ contact.contact }}
+			{% if not forloop.last %},<br>{% endif %}
+		{% endfor %}				
+	</li> 
+{% endfor %}
+</ul>

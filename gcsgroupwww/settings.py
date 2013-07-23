@@ -175,4 +175,5 @@ INSTALLED_APPS = (
     'rdoc',
     'contactlist',
     'orderedmodel',
+    'geo_office',
 )
