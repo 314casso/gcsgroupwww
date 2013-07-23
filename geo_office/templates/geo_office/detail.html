@@ -52,7 +52,6 @@
           //pixelOffset: new google.maps.Size(0, 33),         		
           content: "<strong>" + title + "</strong> \
                     <br />" + address + 
-                    "<br /> {{ office.head_title|safe }} " +                     
                     "<br /> {{ office.contacts|to_comma_sep|safe }}"  
                     
         });
@@ -71,4 +70,3 @@
 
 <div id="google-map-{{ object.pk }}" class="google-map-container"
        style="width: 100%; height: 500px;"></div>  
-</div>

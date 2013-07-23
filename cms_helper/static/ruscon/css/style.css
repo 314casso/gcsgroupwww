@@ -60,3 +60,7 @@ body {
 .clear-list li:first-child{
 	padding-top: 0;
 }
+
+.google-map-container img {
+  max-width: none;
+}
