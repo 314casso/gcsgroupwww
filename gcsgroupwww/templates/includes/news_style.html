@@ -6,5 +6,7 @@
 
 {% if is_paginated %}
 {% load zinnia_tags %}
+<div class="pagination">
 {% zinnia_pagination page_obj %}
+</div>
 {% endif %}
