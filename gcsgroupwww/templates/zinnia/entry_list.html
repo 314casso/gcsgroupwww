@@ -52,7 +52,9 @@
 
 {% block content-pagination %}
 {% if is_paginated %}
+<div class="pagination">
   {% zinnia_pagination page_obj %}
+</div>
 {% endif %}
 {% endblock %}
 
