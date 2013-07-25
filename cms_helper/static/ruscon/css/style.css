@@ -68,3 +68,19 @@ body {
 .entry-image {
 	margin: 5px 15px 0 0;
 }
+
+#header-right {
+	width: 380px;
+	text-align: center;
+	padding-top: 23px;
+	color: white;
+}
+
+#header-right h1 {
+	font-size: 30px;	
+}
+
+#slide-wrapper {
+	overflow: hidden;
+	background: #215e9a;	
+}

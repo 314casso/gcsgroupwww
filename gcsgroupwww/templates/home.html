@@ -6,10 +6,16 @@
 {% block slideshow %}
 <div class="row">
 	<div class="span12">
-		<div id="header-image" class="dotblue">
-			{% show_placeholder "header-image" "global_placeholder" %}
+		<div id="slide-wrapper">
+			<div id="header-image" class="dotblue pull-left">
+				{% show_placeholder "header-image" "global_placeholder" %}
+			</div>
+			<div id="header-right" class="pull-right">
+				{% show_placeholder "header-text" "global_placeholder" %}
+			</div>
 		</div>
 	</div>
+	
 </div>
 {% endblock slideshow %}
 
