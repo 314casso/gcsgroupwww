@@ -64,3 +64,6 @@ body {
 .google-map-container img {
   max-width: none;
 }
+.entry-image {
+	margin-right: 15px;
+}
