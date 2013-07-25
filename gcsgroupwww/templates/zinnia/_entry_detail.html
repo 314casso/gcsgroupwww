@@ -13,9 +13,9 @@
 {% load thumbnail %}
 
 <div class="entry-image pull-left">
-	<div>		
+	<div class="thumbnail">		
 		{% if continue_reading %}
-		 <a class="thumbnail" href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="lightbox[{{ object.pk }}]">
+		 <a href="{{ object.get_absolute_url }}" title="{{ object.title }}" rel="lightbox[{{ object.pk }}]">
 			<img src="{% thumbnail object.image '160x120' crop='smart' %}" alt="{{ object.title }}" class="left" /> 
 		</a>
 		{% else %}	
