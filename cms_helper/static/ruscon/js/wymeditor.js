@@ -4,7 +4,7 @@ $(document).ready(function() {
 		lang : "en",
 		stylesheet : "/static/cms/css/wymeditor.css",
 		updateSelector : "input:submit",
-		updateEvent : "click",
+		updateEvent : "click",		
 		postInit : function(wym) {
 			wym.hovertools();
 		}
