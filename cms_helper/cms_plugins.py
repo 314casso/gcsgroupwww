@@ -18,9 +18,10 @@ from cms.plugins.text.models import Text
 from cms.plugins.text.forms import TextForm
 from cms_helper.forms import PlainTextForm
 from gcsgroupwww.local_settings import DEFAULT_FROM_EMAIL
-from rdoc.models import Doc
+from rdoc.models import Doc, DocCategory
 from cms.models.pluginmodel import CMSPlugin
 from contactlist.cms_plugins import BaseListPlugin
+from django.db import models
 
 class CustomContactPlugin(ContactPlugin):
     name = _("Custom Contact Form")
@@ -124,16 +125,25 @@ class PlainTextPlugin(CMSPluginBase):
 
 plugin_pool.register_plugin(PlainTextPlugin)
 
-class GalleryPlugin(CMSPlugin):
-    pass
-    #categoty = models.ForeignKey(Gallery)
+class DocModelPlugin(CMSPlugin):
+    TEMPLATES = (
+        ('docplugin/doclist.html', _('Basic')),        
+    )   
+    doc_category = models.ForeignKey(DocCategory)
+    limit = models.IntegerField(_('Limit'))
+    template = models.CharField(_('Template'), max_length=255, choices=TEMPLATES,)
 
 class DocPlugin(BaseListPlugin):
-    model = CMSPlugin
+    model = DocModelPlugin
     name = _("Docs")
     render_template = "docplugin/doclist.html"
     limit = 20
-    def get_qset(self):
+    def get_qset(self, **kwargs):      
+        if 'instance' in kwargs:            
+            instance = kwargs['instance']
+            self.limit = instance.limit
+            self.render_template = instance.template        
+            return Doc.objects.filter(doc_category=instance.doc_category)
         return Doc.objects.all()
        
 plugin_pool.register_plugin(DocPlugin)    

@@ -15,7 +15,7 @@ class BaseListPlugin(CMSPluginBase):
         raise 'You must implement %s!' % 'get_qset'
     
     def render(self, context, instance, placeholder):
-        entries = self.get_qset()
+        entries = self.get_qset(instance=instance)
                     
         paginator = Paginator(entries, self.limit)  
         self.request = context['request']          
@@ -44,7 +44,7 @@ class ContactlistPlugin(BaseListPlugin):
     name = _("Persons")
     render_template = "contactlist/person.html"
 
-    def get_qset(self):
+    def get_qset(self, **kwargs):
         return Contact.objects.filter(published=True)
     
 class PartnerPlugin(BaseListPlugin):
@@ -52,7 +52,7 @@ class PartnerPlugin(BaseListPlugin):
     name = _("Partners")
     render_template = "contactlist/partner.html"
 
-    def get_qset(self):
+    def get_qset(self, **kwargs):
         return Partner.objects.filter(published=True)    
 
 plugin_pool.register_plugin(ContactlistPlugin)    

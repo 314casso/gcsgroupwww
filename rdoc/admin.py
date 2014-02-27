@@ -11,8 +11,9 @@ admin.site.register(LogEntry,LogEntryAdmin)
 
 class DocAdmin(admin.ModelAdmin):
     list_display = ('issue_date', 'title', 'desciption', )    
-    list_filter = ('title', 'desciption', )
-    fields = ['issue_date', 'title', 'doc_category',  'desciption','attachment']
+    list_filter = ('doc_category__title', )
+    search_fields = ['title', 'desciption']
+    fields = ['issue_date', 'title', 'doc_category','desciption','attachment']
     
 class DocCategoryAdmin(admin.ModelAdmin):
     list_display = ('title',)   
