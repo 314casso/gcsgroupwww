@@ -124,6 +124,9 @@ class PlainTextPlugin(CMSPluginBase):
 
 plugin_pool.register_plugin(PlainTextPlugin)
 
+class GalleryPlugin(CMSPlugin):
+    pass
+    #categoty = models.ForeignKey(Gallery)
 
 class DocPlugin(BaseListPlugin):
     model = CMSPlugin

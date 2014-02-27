@@ -4,6 +4,16 @@ from django.utils.translation import ugettext_lazy as _
 import datetime
 from rdoc.util import attachment_path
 
+class DocCategory(models.Model):
+    """
+    Doc category    
+    """
+    title = models.CharField(
+        _('Title'),
+        help_text=_('Document category title'),
+        max_length=255,
+        )   
+
 class Doc(models.Model):
     """
     Docs for site
@@ -42,6 +52,8 @@ class Doc(models.Model):
         default=datetime.date.today(),
         )    
         
+    #doc_category = models.ForeignKey(DocCategory, null=True, blank=True)
+    
     def __unicode__(self):
         return u"%s" % self.title
     
