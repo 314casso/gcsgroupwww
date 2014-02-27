@@ -12,7 +12,14 @@ class DocCategory(models.Model):
         _('Title'),
         help_text=_('Document category title'),
         max_length=255,
-        )   
+        )
+    def __unicode__(self):
+        return u"%s" % self.title
+    
+    class Meta:
+        verbose_name = _('document category')
+        verbose_name_plural = _('document categories')
+        ordering = ('title',)   
 
 class Doc(models.Model):
     """
@@ -52,7 +59,7 @@ class Doc(models.Model):
         default=datetime.date.today(),
         )    
         
-    #doc_category = models.ForeignKey(DocCategory, null=True, blank=True)
+    doc_category = models.ForeignKey(DocCategory)
     
     def __unicode__(self):
         return u"%s" % self.title
