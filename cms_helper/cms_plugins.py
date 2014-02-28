@@ -128,6 +128,7 @@ plugin_pool.register_plugin(PlainTextPlugin)
 class DocModelPlugin(CMSPlugin):
     TEMPLATES = (
         ('docplugin/doclist.html', _('Basic')),        
+        ('docplugin/marketlist.html', _('Market')),
     )   
     doc_category = models.ForeignKey(DocCategory)
     limit = models.IntegerField(_('Limit'))
