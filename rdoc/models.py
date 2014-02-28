@@ -32,7 +32,7 @@ class Doc(models.Model):
         max_length=255,
         )
 
-    desciption = models.CharField(
+    description = models.CharField(
         _('Description'),
         help_text=_('Document description'),
         max_length=500,
