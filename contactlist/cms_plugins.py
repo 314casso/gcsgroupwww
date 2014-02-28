@@ -4,7 +4,6 @@ from contactlist.models import Contact, Partner
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from cms.plugin_pool import plugin_pool
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.sites.models import Site
 
 class BaseListPlugin(CMSPluginBase):
     model = CMSPlugin
@@ -27,14 +26,12 @@ class BaseListPlugin(CMSPluginBase):
             objects = paginator.page(1)
         except EmptyPage:        
             objects = paginator.page(paginator.num_pages)
-            
-        current_site = Site.objects.get_current()                
+                        
         context.update({
                 'paginator': paginator,
                 'page_obj': objects,
                 'is_paginated': objects.has_other_pages(),
                 'entries': objects.object_list,
-                'domain' : current_site.domain,
             })  
         return context  
         context.update({
