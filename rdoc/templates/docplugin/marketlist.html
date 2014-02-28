@@ -2,7 +2,7 @@
 
 {% for object in entries %}
 <p>
-	<span class="label">{{ object.issue_date|date:"F Y" }}</span>
+	<span class="label">{{ object.issue_date|date:"M. Y" }}</span>
 	<a href="{{ MEDIA_URL }}{{ object.attachment }}" title="{{ object.title }}" rel="bookmark">{{ object.title }}</a>
 </p>
 {% empty %}
