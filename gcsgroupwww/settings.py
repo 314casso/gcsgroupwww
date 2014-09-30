@@ -20,7 +20,8 @@ MANAGERS = ADMINS
 
 DEFAULT_LANGUAGE = 'ru'
 
-LANGUAGES = [('ru', u'Русский'), ('en', u'English'), ('zh-cn', u'Chinese')]
+#LANGUAGES = [('ru', u'Русский'), ('en', u'English'), ('zh-cn', u'Chinese')]
+LANGUAGES = [('en', u'English'), ('zh-cn', u'Chinese')]
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('en',)
 
 
