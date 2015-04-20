@@ -96,6 +96,11 @@ body {
     margin-top: 20px;
 }
 
+.header-phones ul li label {
+	display: inline-block;
+	font-size: 12px;
+}
+
 .header-phones ul li{	
     list-style: None;   
 }
