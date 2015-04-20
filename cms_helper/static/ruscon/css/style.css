@@ -94,6 +94,7 @@ body {
 .header-phones{
 	font-size: 14px;         
     margin-top: 20px;
+    font-weight: 700;    
 }
 
 .header-phones ul li label {
