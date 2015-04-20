@@ -23,12 +23,19 @@
 		<div class="container shadow" style="background: white;">
 
 			<div class="row">
-				<div class="span10 header-image">
+				<div class="span9 header-image">
 					<p id="logo">
 						<img src="{{ STATIC_URL }}ruscon/images/gcslogo.svg">
 					</p>
 				</div>
-				<div class="span2">
+				<div class="span3">
+					<div class="right header-phones">
+						<ul>
+							<li>+7 (495) 740-16-60 <label>Moscow</label></li>
+							<li>+7 (812) 335-00-20 <label>St.Petersburg</label></li>
+							<li>+7 (8617) 676-037 <label>Novorossiysk</label></li>
+						</ul>
+					</div>
 					<p id="lang" class="right">
 						{% for lang in LANGUAGES %}<a href="/{{lang.0}}{{request.path}}">{{ lang.0|human_lang|safe }}</a>{% endfor %}
 					</p>
