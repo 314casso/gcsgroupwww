@@ -36,7 +36,7 @@ body {
 }
 
 #lang {
-	padding: 15px 0 0 0; 
+	padding: 0 0 0 0; 
 }
 
 #lang a{
@@ -93,7 +93,7 @@ body {
 
 .header-phones{
 	font-size: 14px;         
-    margin-top: 20px;
+    margin-top: 28px;
     font-weight: 700;    
 }
 
