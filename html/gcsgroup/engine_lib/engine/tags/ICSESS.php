@@ -1,4 +1,0 @@
-<?
-global $icsession;
-echo $icsession;
-?>

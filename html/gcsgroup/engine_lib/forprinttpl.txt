@@ -1,8 +1,0 @@
-<table cellpadding=10>
-<tr><td>
-<p class=zag>[DOCFIELD type=caption_short]</p>
-</td></tr>
-<tr><td>
-[BODY]
-</td></tr>
-</table>
